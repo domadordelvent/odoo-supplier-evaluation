@@ -1,0 +1,17 @@
+<odoo>
+    <record id="supplier_deadline_revision_company_rule" model="ir.rule">
+        <field name="name">Supplier deadline revisions: allowed companies</field>
+        <field name="model_id" ref="model_supplier_evaluation_deadline_revision"/>
+        <field name="domain_force">[('company_id', 'in', company_ids)]</field>
+    </record>
+    <record id="supplier_deadline_confirmation_company_rule" model="ir.rule">
+        <field name="name">Supplier deadline confirmations: allowed companies</field>
+        <field name="model_id" ref="model_supplier_evaluation_deadline_confirmation"/>
+        <field name="domain_force">[('company_id', 'in', company_ids)]</field>
+    </record>
+    <record id="supplier_deadline_wizard_company_rule" model="ir.rule">
+        <field name="name">Supplier deadline wizard: allowed companies</field>
+        <field name="model_id" ref="model_supplier_evaluation_deadline_renegotiation_wizard"/>
+        <field name="domain_force">[('company_id', 'in', company_ids)]</field>
+    </record>
+</odoo>
