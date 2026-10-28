@@ -1,3 +1,49 @@
+# OTD per línia completada — codi pendent d'activació
+
+Data: 2026-10-28. Versió de codi: `18.0.1.1.0`.
+
+- **33 proves locals superades**: 14 preexistents i 19 noves de l'OTD.
+- **97 proves d'integració superades** en 16,517 segons: 19 OTD i 78
+  preexistents, amb **0 errors i 0 fallades**, al primer intent.
+- Actualització del mòdul i compilació de les vistes correctes només a la base
+  temporal independent. Sense avisos ni errors als registres.
+- Sintaxi validada dels 22 fitxers Python i dels quatre XML.
+- `git diff --check` sense errors.
+
+Les proves locals executen els mètodes de producció amb substituts d'Odoo.
+Cobreixen originals i confirmacions, canvis tècnics ignorats, tall temporal,
+límit de 24 hores, parcials, quantitats netes incompletes, sobrerecepcions,
+dades desconegudes, congelació posterior i proteccions dels camps.
+No validen SQL, bloquejos concurrents ni conversions reals d'unitats.
+
+Els casos ORM afegeixen recepcions reals, confirmacions entre parcials,
+preservació de captures anteriors, línies antigues, permisos, còpies,
+conversions d'unitats, devolucions abans/després i cancel·lació de backorders.
+El codi instal·lat de les unitats i devolucions s'ha consultat en mode lectura.
+
+La còpia de seguretat s'ha verificat amb SHA-256, lectura completa del dump,
+lectura completa de l'arxiu de filestore i restauració efectiva a la base
+`supplier_evaluation_otd_*`. El PostgreSQL temporal
+utilitza una xarxa Docker interna independent, sense connexió al servidor
+original, i un filestore separat. El contenidor temporal s'ha aturat després
+de les comprovacions; la còpia de proves es conserva per a inspecció.
+
+Les connexions utilitzades per llegir la base original tenien
+`default_transaction_read_only=on`. El SHA-256 del contingut lògic complet,
+incloses les seqüències, coincideix abans i després. El filestore original
+també es conserva intacte. Les dades de negoci de la còpia de proves s'han
+revertit; els valors de seqüència consumits afecten només la base temporal.
+
+El llançador rebutja bases sense el prefix `supplier_evaluation_otd_`.
+No s'ha actualitzat ni modificat `supplier_evaluation`, no s'han reiniciat
+els serveis originals i no s'ha executat el generador de dades fictícies.
+Les evidències locals i les còpies queden a `backups/`, exclòs de Git.
+
+Limitacions: no hi ha prova de navegador real ni de concurrència amb sessions
+simultànies. La funcionalitat encara no s'ha activat a la base original.
+
+---
+
 # Assistent visual de renegociacions
 
 Data local: 2026-10-18. Registres UTC: 2026-10-17.

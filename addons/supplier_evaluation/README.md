@@ -1,12 +1,12 @@
 # Supplier Evaluation
 
-Mòdul per a Odoo 18 Community, versió `18.0.1.0.0`.
+Mòdul per a Odoo 18 Community, versió de codi `18.0.1.1.0`.
 Dependències: `base`, `purchase`, `stock`, `purchase_stock`.
 
-**Estat: assistent visual implementat i mòdul actualitzat a la base existent,
-amb còpia de seguretat prèvia. Validat amb Odoo 18 Community `18.0-20260305`:
-78 proves d'integració superades.**
-Els resultats i les limitacions es documenten a `tests/RESULTS.md`.
+**Estat: OTD per línia completada implementat i validat en una base temporal
+independent: 97 proves d'integració superades (19 OTD i 78 preexistents).**
+La base original `supplier_evaluation` continua sense actualitzar.
+Els resultats actuals i anteriors es documenten a `tests/RESULTS.md`.
 
 ## Objectiu i separació de mètriques
 
@@ -18,6 +18,61 @@ tolerància de 24 hores. La puntualitat i la fiabilitat són independents:
   `late`; només s'assigna `on_time` si tots tenen dades suficients i són puntuals.
 - Fiabilitat: conservació del compromís original conegut i historial de les
   transicions posteriors de data, sense puntuacions globals.
+
+## OTD per línia completada
+
+La nova mètrica és independent de la classificació existent de recepcions.
+Cada línia genera una sola captura en passar de quantitat rebuda inferior a
+la demanada a quantitat rebuda suficient durant la validació d'una recepció.
+S'utilitza `qty_received` d'Odoo, amb les conversions d'unitats i devolucions
+que aplica el model estàndard, i la precisió de la unitat de la línia.
+
+- Referència: última renegociació confirmada de la línia i del proveïdor actual
+  existent abans de validar i amb `confirmed_at` no posterior a la finalització. Sense confirmació vàlida,
+  s'utilitza el compromís original conegut del mateix proveïdor.
+- `date_planned` no intervé en l'OTD. Una revisió tècnica no confirmada no
+  modifica el termini de referència.
+- Finalització: última data immutable capturada dels moviments rebuts de la
+  línia. No es llegeixen `move.date` ni `picking.date_done` com a substituts.
+- Puntual si la finalització és anterior o igual al termini més 24 hores;
+  un segon més tard ja és retard. Les dates es comparen en UTC.
+- Abans de validar es fixa, sota bloqueig, quines confirmacions ja existeixen.
+  Això admet un acord anterior dins del mateix segon sense admetre acords
+  creats després de la recepció; les dates tenen precisió de segons.
+
+La captura conserva resultat, termini, confirmació utilitzada (si existeix),
+data de finalització, instant de captura, proveïdor, quantitats demanada i
+rebuda i unitat. Tots els camps són de només lectura, `copy=False` i protegits
+al servidor contra creació/escriptura pública, inclosos `sudo()` i valors de
+context. Les línies capturades no es poden eliminar ordinàriament.
+
+Una parcial no genera resultat. Les sobrerecepcions compten una vegada.
+Una devolució anterior a la primera finalització que redueix `qty_received`
+impedeix completar fins a rebre la quantitat que falta. Una devolució,
+confirmació, canvi de dates o canvi de quantitat posterior no substitueix
+l'observació congelada: no és un indicador de saldo net recalculat.
+
+S'exclouen serveis, seccions/notes, quantitats no positives, línies cancel·lades
+i recepcions que no passen pel flux d'entrada física de proveïdor. Cancel·lar
+un backorder no completa una línia parcial. Reduir la quantitat d'una línia
+ja rebuda no genera retroactivament una captura.
+
+Les línies ja completades abans d'activar aquesta versió no es reomplen.
+Una línia parcial antiga que es completa ara però té recepcions sense captura,
+o un termini original desconegut sense acord vàlid, es marca `unknown`;
+no es presenta com a puntual. Buit significa encara no avaluada, mentre que
+`unknown` significa completada sense evidència suficient. No hi ha percentatge
+global de proveïdor en aquesta fase.
+
+Les captures històriques de `stock.move` i `stock.picking` continuen intactes,
+amb la seva semàntica anterior. Per això el resultat de recepció pot diferir
+de l'OTD de línia. La captura OTD utilitza els mateixos bloquejos de línia que
+les confirmacions per serialitzar-les amb la validació de recepcions.
+
+A la comanda, les columnes **OTD línia completada**, **Termini OTD** i
+**Línia completada el** es poden activar des del selector de columnes.
+El formulari de línia també mostra la confirmació utilitzada.
+Aquestes vistes requereixen actualitzar el mòdul; no s'han activat a la base.
 
 ## Historial de terminis
 
@@ -185,8 +240,9 @@ En aquesta primera fase, les confirmacions documenten acords i atribució,
 però no canvien la selecció de data de les futures captures: la validació
 continua utilitzant el `date_planned` vigent. No s'han modificat les captures
 completades, el càlcul de puntualitat ni el recompte de fiabilitat existent.
-La integració de l'últim acord confirmat en futures mètriques queda fora
-d'aquesta fase. No s'han afegit puntuacions globals ni informes.
+Aquesta semàntica anterior de recepció es conserva. La nova captura OTD de
+línia descrita més amunt sí que utilitza l'últim acord confirmat vàlid.
+No s'han afegit puntuacions globals ni informes.
 
 ## Proves i estat de validació
 
@@ -196,24 +252,32 @@ Proves locals, sense Odoo ni base de dades:
 PYTHONDONTWRITEBYTECODE=1 python3 -m unittest discover -s tests -v
 ```
 
-S'han superat 14 proves unitàries que executen els mètodes de producció amb
-substituts de les declaracions, cursor i part del model base d'Odoo.
+S'han superat 33 proves locals (19 de l'OTD i 14 preexistents) que executen
+els mètodes de producció amb substituts de les declaracions, cursor i part
+del model base d'Odoo.
 No validen la integració amb l'ORM ni el SQL contra PostgreSQL.
 
-S'han superat **78 proves reals TransactionCase**: 32 de l'historial, 25 de
-confirmacions i 21 de l'assistent i les vistes. Cobreixen permisos, empreses, integritat, SQL
-anti-duplicats, originals desconeguts, cadenes d'acords, avançaments, historial,
-recepcions parcials i preservació de captures. El llançador s'atura al primer
-error i totes les dades de prova es reverteixen:
+S'han superat **97 proves reals TransactionCase**: 32 d'historial, 25 de
+confirmacions, 21 de l'assistent i les vistes i 19 d'OTD. L'execució completa
+va finalitzar en 16,517 segons, amb zero errors i zero fallades.
 
-```sh
-docker exec -i odoo-supplier-evaluation-odoo-1 /entrypoint.sh odoo shell -d supplier_evaluation --no-http --max-cron-threads=0 < tests/odoo_integration.py
-```
+S'ha restaurat una còpia verificada en un PostgreSQL separat, dins d'una
+xarxa Docker interna, amb un filestore independent. Només s'ha actualitzat
+el mòdul a aquesta base temporal. Les dades de les proves es reverteixen;
+les seqüències PostgreSQL poden avançar encara que hi hagi rollback.
+
+`tests/odoo_integration.py` s'executa des d'un Odoo shell configurat per al
+servidor temporal i rebutja bases sense el prefix `supplier_evaluation_otd_`.
+Cal preparar el nou esquema a la còpia abans d'executar-lo. No s'ha de dirigir
+el llançador ni l'actualització del mòdul a la base original.
 
 Les proves utilitzen les vistes compilades d'Odoo i el simulador `Form` del
-client, incloent-hi la selecció d'atribució i el desament del formulari. No s'ha
-executat una prova de navegador real ni un tour JavaScript. Els detalls de
-les execucions, correccions de prova, còpia i registres són a `tests/RESULTS.md`.
-No s'ha modificat Docker ni reinicialitzat la base de dades. PostgreSQL pot
-consumir valors de seqüència encara que les dades de prova es reverteixin.
+client. La instal·lació de les vistes i tota la suite s'han completat sense
+avisos ni errors als registres. No s'ha executat una prova de navegador real,
+un tour JavaScript ni una prova de càrrega amb sessions concurrents.
+
+La comparació SHA-256 dels dumps lògics abans i després confirma que la base
+original no ha canviat. També s'ha verificat la integritat del filestore.
+No s'ha executat el generador de dades fictícies. Les còpies, els registres
+i les comprovacions es conserven a `backups/`, exclòs de Git.
 Les escriptures SQL externes a l'ORM no queden cobertes pel seguiment de dates.

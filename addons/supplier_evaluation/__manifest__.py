@@ -1,8 +1,8 @@
 {
     "name": "Supplier Evaluation",
-    "version": "18.0.1.0.0",
-    "summary": "Puntualitat immutable i historial de terminis dels proveïdors",
-    "description": "Consulta l'historial de terminis i confirma renegociacions amb justificació, conservant el compromís original i les avaluacions de recepcions completades.",
+    "version": "18.0.1.1.0",
+    "summary": "OTD per línia completada i historial de terminis dels proveïdors",
+    "description": "OTD immutable per línia completada segons l'últim acord confirmat o el compromís original, amb tolerància de 24 hores. Conserva les captures històriques de recepcions.",
     "category": "Inventory/Inventory",
     "license": "LGPL-3",
     "depends": ["base", "purchase", "stock", "purchase_stock"],

@@ -55,6 +55,8 @@ class StockPicking(models.Model):
         lines = candidates.move_ids.purchase_line_id.sudo()
         lines._supplier_lock_deadlines()
         lines._supplier_ensure_history()
+        otd_pending = lines._supplier_otd_pending_lines()
+        otd_confirmation_limits = otd_pending._supplier_otd_confirmation_limits()
         agreements = {}
         for line in lines:
             revision = self.env["supplier.evaluation.deadline.revision"].sudo().search(
@@ -88,4 +90,5 @@ class StockPicking(models.Model):
                 "supplier_punctuality": status,
                 "supplier_evaluation_captured_at": captured_at,
             })
+        otd_pending._supplier_capture_otd(otd_confirmation_limits)
         return result
