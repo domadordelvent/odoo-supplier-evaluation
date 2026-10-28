@@ -1,3 +1,36 @@
+# Auditoria de l'OTD agregat per proveïdor
+
+Data: 2026-10-29.
+
+L'auditoria inicial confirma que `purchase_line_otd.py` ja conserva un únic
+resultat de primera finalització, juntament amb proveïdor, termini i instant
+capturats. `res_partner.py` només contenia la declaració `_inherit` i encara
+no hi havia vista ni percentatge agregat propi.
+
+La implementació reutilitza aquests camps sense modificar el mètode de
+captura ni cap resultat històric. `res.partner` afegeix percentatge, tres
+comptadors, senyal d'existència de dades i una relació de dependències amb
+les línies capturades. Tots els indicadors són no emmagatzemats.
+
+Una consulta ORM agrupada per proveïdor capturat i estat compta files, no
+quantitats ni imports. Filtra captura, dates conegudes, estat on_time/late,
+comandes aprovades/no cancel·lades i empreses seleccionades autoritzades.
+La consulta elimina qualsevol sudo heretat i aplica les regles de compres.
+La memòria cau depèn d'usuari i empreses; les captures i l'estat de comanda
+invaliden els valors calculats.
+
+La nova pestanya «Avaluació OTD» al formulari de contacte està restringida a
+compres i diferencia explícitament «Sense dades» de 0 %. L'indicador natiu
+`on_time_rate` d'Odoo no es modifica, perquè té una fórmula diferent.
+
+Validació: 118 proves ORM superades en una còpia temporal independent,
+incloses 21 noves de l'agregat; 33 proves locals superades. El SHA-256 de la
+base original i el contingut del filestore són idèntics abans i després.
+La versió nova és `18.0.1.2.0`; l'original segueix a `18.0.1.1.0`.
+Els detalls i limitacions consten a `tests/RESULTS.md`.
+
+---
+
 # Auditoria i implementació de l'OTD per línia completada
 
 Data: 2026-10-28.

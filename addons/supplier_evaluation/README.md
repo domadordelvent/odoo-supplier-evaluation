@@ -1,11 +1,12 @@
 # Supplier Evaluation
 
-Mòdul per a Odoo 18 Community, versió de codi `18.0.1.1.0`.
+Mòdul per a Odoo 18 Community, versió de codi `18.0.1.2.0`.
 Dependències: `base`, `purchase`, `stock`, `purchase_stock`.
 
-**Estat: OTD per línia completada implementat i validat en una base temporal
-independent: 97 proves d'integració superades (19 OTD i 78 preexistents).**
-La base original `supplier_evaluation` continua sense actualitzar.
+**Estat: OTD agregat per proveïdor implementat i validat en una base temporal
+independent: 118 proves d'integració superades (21 agregat i 97 preexistents).**
+La base original `supplier_evaluation` es manté a `18.0.1.1.0`; la nova versió
+agregada no s'hi ha actualitzat ni activat.
 Els resultats actuals i anteriors es documenten a `tests/RESULTS.md`.
 
 ## Objectiu i separació de mètriques
@@ -61,8 +62,8 @@ Les línies ja completades abans d'activar aquesta versió no es reomplen.
 Una línia parcial antiga que es completa ara però té recepcions sense captura,
 o un termini original desconegut sense acord vàlid, es marca `unknown`;
 no es presenta com a puntual. Buit significa encara no avaluada, mentre que
-`unknown` significa completada sense evidència suficient. No hi ha percentatge
-global de proveïdor en aquesta fase.
+`unknown` significa completada sense evidència suficient. L'agregat per
+proveïdor només inclou resultats coneguts, com es descriu a continuació.
 
 Les captures històriques de `stock.move` i `stock.picking` continuen intactes,
 amb la seva semàntica anterior. Per això el resultat de recepció pot diferir
@@ -73,6 +74,54 @@ A la comanda, les columnes **OTD línia completada**, **Termini OTD** i
 **Línia completada el** es poden activar des del selector de columnes.
 El formulari de línia també mostra la confirmació utilitzada.
 Aquestes vistes requereixen actualitzar el mòdul; no s'han activat a la base.
+
+## OTD agregat a la fitxa del proveïdor
+
+Ruta després d'activar la versió `18.0.1.2.0` a la base corresponent:
+**Compres → Comandes → Proveïdors → obre el proveïdor → Avaluació OTD**.
+En anglès: **Purchase → Orders → Vendors → Avaluació OTD**. També es pot
+obrir la mateixa fitxa des de Contactes. Cal ser usuari o responsable de compres.
+La base original encara no té activada aquesta nova pestanya.
+
+La fitxa mostra **Percentatge OTD**, **Línies avaluades**, **Línies puntuals**
+i **Línies tardanes**. La fórmula és:
+
+`100 × línies puntuals / (línies puntuals + línies tardanes)`
+
+Cada línia compta una vegada, sense ponderació per quantitat ni preu. El
+percentatge es presenta amb dos decimals. Sense línies avaluades es mostra
+**Sense dades** i els comptadors són zero; si totes les avaluades són tardanes,
+es mostra correctament **0 %**, que és un resultat diferent d'absència de dades.
+Els clients API han de consultar `supplier_otd_has_data` abans d'interpretar
+el valor numèric de `supplier_otd_percentage`.
+
+Només es compten línies amb captura OTD congelada, data de finalització,
+termini i resultat conegut `on_time` o `late`, de comandes en estat `purchase`
+o `done`. No es compten seccions/notes, línies sense captura, parcials encara
+no completades, desconegudes ni comandes cancel·lades.
+
+L'atribució utilitza `supplier_otd_supplier_id`, el proveïdor capturat, encara
+que la comanda canviï després de proveïdor. Cada fitxa és independent: els
+contactes d'una empresa no es consoliden silenciosament a la fitxa pare.
+No hi ha un filtre temporal implícit. Una devolució o un canvi de quantitat
+posterior no elimina l'observació històrica de primera finalització ni en
+recalcula el resultat. Una cancel·lació de comanda sí que l'exclou del resum,
+sense tocar la captura.
+
+Els camps són calculats no emmagatzemats: no hi ha migració de captures ni
+escriptures als resultats històrics. Una consulta agrupada de les línies
+resol tots els proveïdors consultats. Les dependències invaliden la memòria
+cau en completar línies o canviar l'estat de la comanda.
+
+L'agregat inclou només les empreses seleccionades que pertanyen a l'usuari,
+amb memòria cau diferenciada per usuari i context d'empreses. Els permisos i
+les regles de registre de compres continuen aplicant-se, fins i tot si el
+proveïdor es consulta amb `sudo()`. Usuaris sense grup de compres, inclosos
+portal i magatzem, no poden llegir els camps agregats.
+
+El camp estàndard d'Odoo `on_time_rate` es conserva amb la seva fórmula
+original, basada en quantitats i dates previstes. L'OTD agregat d'aquesta
+pestanya utilitza exclusivament les nostres captures per línia.
 
 ## Historial de terminis
 
@@ -242,7 +291,7 @@ continua utilitzant el `date_planned` vigent. No s'han modificat les captures
 completades, el càlcul de puntualitat ni el recompte de fiabilitat existent.
 Aquesta semàntica anterior de recepció es conserva. La nova captura OTD de
 línia descrita més amunt sí que utilitza l'últim acord confirmat vàlid.
-No s'han afegit puntuacions globals ni informes.
+La nova vista agregada del proveïdor no altera aquests resultats de recepció.
 
 ## Proves i estat de validació
 
@@ -257,9 +306,10 @@ els mètodes de producció amb substituts de les declaracions, cursor i part
 del model base d'Odoo.
 No validen la integració amb l'ORM ni el SQL contra PostgreSQL.
 
-S'han superat **97 proves reals TransactionCase**: 32 d'historial, 25 de
-confirmacions, 21 de l'assistent i les vistes i 19 d'OTD. L'execució completa
-va finalitzar en 16,517 segons, amb zero errors i zero fallades.
+S'han superat **118 proves reals TransactionCase**: 32 d'historial, 25 de
+confirmacions, 21 de l'assistent i les vistes, 19 d'OTD per línia i 21 de
+l'agregat per proveïdor. L'execució completa va finalitzar en 15,369 segons,
+amb zero errors i zero fallades.
 
 S'ha restaurat una còpia verificada en un PostgreSQL separat, dins d'una
 xarxa Docker interna, amb un filestore independent. Només s'ha actualitzat

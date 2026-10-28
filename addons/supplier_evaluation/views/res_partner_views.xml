@@ -1,0 +1,31 @@
+<odoo>
+    <record id="res_partner_form_supplier_otd" model="ir.ui.view">
+        <field name="name">res.partner.form.supplier.otd</field>
+        <field name="model">res.partner</field>
+        <field name="inherit_id" ref="base.view_partner_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//notebook" position="inside">
+                <page name="supplier_otd" string="Avaluació OTD" groups="purchase.group_purchase_user">
+                    <field name="supplier_otd_has_data" invisible="1"/>
+                    <group string="OTD per línia completada">
+                        <label for="supplier_otd_percentage"/>
+                        <div>
+                            <span invisible="supplier_otd_has_data">Sense dades</span>
+                            <span invisible="not supplier_otd_has_data">
+                                <field name="supplier_otd_percentage" class="oe_inline" readonly="1"/> %
+                            </span>
+                        </div>
+                        <field name="supplier_otd_evaluated_count" readonly="1"/>
+                        <field name="supplier_otd_on_time_count" readonly="1"/>
+                        <field name="supplier_otd_late_count" readonly="1"/>
+                    </group>
+                    <p class="text-muted">
+                        Cada línia avaluada compta una vegada. Només s'utilitzen resultats OTD
+                        congelats de les empreses seleccionades i accessibles per a l'usuari.
+                        S'exclouen línies sense avaluació, sense dades suficients i comandes cancel·lades.
+                    </p>
+                </page>
+            </xpath>
+        </field>
+    </record>
+</odoo>

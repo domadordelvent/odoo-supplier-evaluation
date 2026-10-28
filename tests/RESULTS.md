@@ -1,3 +1,46 @@
+# OTD agregat per proveïdor — pendent d'activació a la base original
+
+Data local: 2026-10-29. Execució UTC: 2026-10-28.
+Versió de codi i de la base temporal: `18.0.1.2.0`.
+
+- **118 proves d'integració superades** en 15,369 segons: les 97 preexistents
+  i **21 noves d'agregació**. Resultat final: **0 errors i 0 fallades**.
+- **33 proves locals superades**; no s'ha repetit la suite d'integració
+  després d'obtenir el resultat correcte.
+- La nova vista del proveïdor s'ha instal·lat i compilat a la base temporal.
+  Les proves comproven els quatre indicadors, la visibilitat de «Sense dades»
+  i l'absència de la pestanya per als usuaris sense permisos de compres.
+- La primera execució es va aturar en esperar set decimals en un camp que
+  Odoo arrodoneix a dos. S'ha corregit l'assert de la prova; el resultat
+  esperat d'una línia puntual de tres és `33.33`. La segona execució completa
+  ha superat tota la suite, inclosa una nova prova de devolució posterior.
+
+La cobertura nova inclou 0/100 %, absència de dades, fraccions, pesos iguals
+per línia, parcials i múltiples recepcions, originals desconeguts, recepcions
+antigues sense captura, cancel·lacions, canvis posteriors de dates/acords,
+quantitats i preus, devolucions, atribució al proveïdor congelat, contactes,
+càlcul per lots, preservació de captures, permisos de comprador/responsable,
+portal/magatzem, regles de registre, intents amb sudo i selecció d'empreses
+separades/conjuntes sense compartir valors erronis de memòria cau.
+
+S'ha restaurat una còpia verificada en un PostgreSQL separat, amb xarxa
+Docker interna i filestore independent. Només s'ha actualitzat aquesta
+base temporal. Les dades de prova s'han revertit i el contenidor de proves
+ha quedat aturat; es conserva per a inspecció.
+
+El SHA-256 del dump lògic complet de `supplier_evaluation` coincideix abans i
+després. El filestore original també és idèntic. La base original continua
+a `18.0.1.1.0`: no s'ha actualitzat, ni s'han reiniciat els seus serveis.
+No s'ha executat el generador de dades fictícies ni publicat res a GitHub.
+Les evidències, registres i còpies romanen a `backups/`, exclòs de Git.
+
+Limitacions: no hi ha prova de navegador real ni càrrega amb sessions
+concurrents. Els resultats depenen de les empreses seleccionades i de les
+regles de lectura de cada usuari. La nova pestanya encara no és a la base
+original; requereix una actualització autoritzada posterior.
+
+---
+
 # OTD per línia completada — codi pendent d'activació
 
 Data: 2026-10-28. Versió de codi: `18.0.1.1.0`.
