@@ -1,0 +1,10 @@
+[options]
+; Copy to secrets/odoo-demo.conf and set a random master password manually.
+; This is NOT environment-variable substitution syntax.
+admin_passwd = REPLACE_WITH_RANDOM_MASTER_PASSWORD
+addons_path = /mnt/extra-addons,/usr/lib/python3/dist-packages/odoo/addons
+data_dir = /var/lib/odoo
+dbfilter = ^supplier_evaluation_demo$
+list_db = False
+max_cron_threads = 0
+workers = 0

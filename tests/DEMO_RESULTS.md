@@ -1,3 +1,7 @@
+> Historical validation record. Dates, deployment states and local backup paths
+> below describe past runs, not installation requirements or the current release.
+> For current results, see [Publication audit](../docs/PUBLICATION_AUDIT.md).
+
 # Prova del generador de demostració OTD
 
 Data local: 2026-10-29. Odoo 18 Community, mòdul `18.0.1.2.0`.

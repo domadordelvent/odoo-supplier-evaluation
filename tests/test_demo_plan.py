@@ -97,3 +97,10 @@ class TestDemoPlan(unittest.TestCase):
         env = SimpleNamespace(cr=SimpleNamespace(dbname='supplier_evaluation'))
         with self.assertRaises(RuntimeError):
             demo.generate_demo(env, 'supplier_evaluation', allow_permanent=True)
+
+    def test_only_installed_compatible_module_versions_are_accepted(self):
+        for version in ('18.0.1.2.0', '18.0.1.3.0'):
+            demo.check_module_version('installed', version)
+        for state, version in (('uninstalled', '18.0.1.3.0'), ('to upgrade', '18.0.1.3.0'), ('installed', '18.0.1.4.0'), ('installed', '19.0.1.0.0')):
+            with self.subTest(state=state, version=version), self.assertRaises(RuntimeError):
+                demo.check_module_version(state, version)

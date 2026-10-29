@@ -1,3 +1,8 @@
+# Documentació tècnica del mòdul
+
+Project overview and installation in English: [main README](../../README.md).
+This document retains the detailed Catalan implementation notes.
+
 # Supplier Evaluation
 
 Mòdul per a Odoo 18 Community, versió de codi `18.0.1.3.0`.
@@ -35,11 +40,12 @@ sense dades al final i abans d'aplicar la paginació. El filtre **OTD inferior
 al 50 %** exclou els casos sense dades. També hi ha filtres **Amb dades** i
 **Sense dades**.
 
-Clicant el proveïdor s'obre la fitxa normal. La pestanya **Avaluació OTD**
+Clicant el proveïdor s'obre el formulari derivat d'avaluació. La pestanya **Avaluació OTD**
 mostra el percentatge gran, un `progressbar` natiu i tres comptadors compactes.
 **Veure línies avaluades** obre una llista i formulari de consulta de les
-captures que justifiquen el resultat. No hi ha gràfics, JavaScript ni CSS
-personalitzats, ni dependències noves per al mòdul.
+captures que justifiquen el resultat. No hi ha gràfics ni JavaScript personalitzats. Una única regla SCSS,
+limitada a la pista de progrés OTD, amplia la barra nativa; no afegeix
+dependències externes.
 
 Els camps calculats existents i la seva elegibilitat s'han reutilitzat en un
 únic domini compartit. Per ordenar camps no emmagatzemats es fa una consulta
@@ -53,9 +59,9 @@ Els permisos i regles de compres, la selecció d'empreses i el proveïdor
 capturat continuen limitant comptadors, filtres, ordenació i línies de detall.
 El detall és de només lectura. Les captures congelades no s'han modificat.
 
-La nova versió encara requereix autorització d'actualització per veure-la a
-`supplier_evaluation` o `supplier_evaluation_demo`. Els percentatges de la
-versió permanent actual continuen a la pestanya prèvia del proveïdor.
+La instal·lació estàndard i els requisits independents de Docker es descriuen
+a [la guia d'instal·lació](../../docs/INSTALLATION.md). El desplegament de cada
+entorn és independent del codi del repositori.
 
 ## OTD per línia completada
 

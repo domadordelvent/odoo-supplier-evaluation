@@ -1,3 +1,7 @@
+> Historical validation record. Dates, deployment states and local backup paths
+> below describe past runs, not installation requirements or the current release.
+> For current results, see [Publication audit](../docs/PUBLICATION_AUDIT.md).
+
 # Ajustos finals de presentació — 2026-10-30
 
 Validats sobre una còpia independent de `supplier_evaluation_demo`, sense

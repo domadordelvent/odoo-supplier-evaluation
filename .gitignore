@@ -75,3 +75,9 @@ temp/
 .vscode/
 .DS_Store
 Thumbs.db
+
+# Optional browser/test environments and generated reports
+.venv-*/
+playwright-report/
+test-results/
+*.har

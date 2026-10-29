@@ -1,103 +1,93 @@
-# Odoo Supplier Evaluation — demostració permanent
+# Optional local demonstration
 
-Base **neta**, creada des de zero amb Odoo 18 i Supplier Evaluation
-`18.0.1.2.0`, sense restaurar dades de l'original ni carregar dades de mostra
-dels mòduls estàndard. El conjunt OTD s'ha generat amb la llavor **180120**.
+The installable addon does not require Docker, this database name, or the demo
+generator. See [standard installation](docs/INSTALLATION.md) first.
 
-## Entrada
+## Existing validated dataset
 
-- URL local: <http://127.0.0.1:8074/web/login?db=supplier_evaluation_demo>
-- Base: `supplier_evaluation_demo`.
-- Usuari: `demo_admin`.
-- Contrasenya: fitxer local `credentials/demo-access.txt`, només llegible pel
-  propietari i exclòs de Git. No és la contrasenya de l'Odoo original.
-- Indicadors: **Purchase → Orders → Vendors → obre un proveïdor → Avaluació OTD**.
+The fictional dataset was originally generated with module 18.0.1.2.0 and seed
+**180120**, then preserved while upgrading the interface to **18.0.1.3.0**:
 
-Accés web autenticat verificat amb HTTP 200, formulari de proveïdor compilat
-i consultes reals dels indicadors mitjançant la sessió de demostració.
+- 10 fictional suppliers, 100 purchase orders and 200 completed lines.
+- 150 receipts, including partial deliveries, and 100 confirmed renegotiations.
+- Supplier 01 through Supplier 10: respectively 10%, 20%, …, 100% OTD,
+  with 20 evaluated lines per supplier.
+- Supplier 05: 10 on time and 10 late (50%).
 
-## Dades verificades
+Screenshots in [docs/screenshots](docs/screenshots/README.md) contain only this
+fictional data. No database dump or preloaded volume is distributed.
 
-Hi ha exactament **10 proveïdors**, **100 comandes**, **200 línies**,
-**150 recepcions** i **100 confirmacions de renegociació**.
-Els proveïdors `[OTD DEMO v1] Supplier 01` … `Supplier 10` tenen cadascun
-20 línies avaluades i OTD respectivament de **10 %, 20 %, …, 100 %**.
-La segona execució del generador ha reutilitzat el conjunt sense duplicats.
-No hi ha comandes o proveïdors copiats de la base original. Els registres
-base d'Odoo (usuaris del sistema, moneda, països, etc.) són els d'una
-instal·lació nova; l'empresa i l'administrador tenen noms ficticis.
+## Separate Docker environment
 
-## Docker i persistència
+`compose.demo.yml` defines independent PostgreSQL and Odoo volumes, an internal
+database network and a web binding at **127.0.0.1:8074**. It never points at the
+other Compose project's database. Scheduled workers are disabled.
 
-Configuració separada: `compose.demo.yml`, projecte
-`odoo-supplier-evaluation-demo`. El fitxer original `docker-compose.yml`
-no s'ha modificat.
+Prepare private files before starting an environment:
 
 ```sh
-docker compose --env-file .env.demo -f compose.demo.yml ps
-docker compose --env-file .env.demo -f compose.demo.yml up -d --wait
+cp .env.demo.example .env.demo
+mkdir -p secrets credentials
+cp config/odoo-demo.conf.example secrets/odoo-demo.conf
 ```
 
-Per aturar només la demostració, conservant les dades:
+Replace every placeholder with independent random values. The master password
+must be copied explicitly into the Odoo configuration: the INI file does not
+expand `.env.demo` variables. Web credentials are operator inputs for account
+setup; Compose does not automatically create that user. The PostgreSQL password
+is passed by the Odoo image entrypoint. Keep the credential directory private,
+and make the mounted Odoo configuration readable by the container's Odoo user
+without making the containing host directory public.
+
+For a **new, empty demo environment**, start only PostgreSQL, then install:
+
+```sh
+docker compose --env-file .env.demo -f compose.demo.yml up -d db-demo
+docker compose --env-file .env.demo -f compose.demo.yml run --rm --no-deps \
+  odoo-demo odoo -d supplier_evaluation_demo -i supplier_evaluation \
+  --without-demo=all --stop-after-init --no-http --max-cron-threads=0
+```
+
+Do not use this initialization command on an existing database. Before starting
+the web service, use an Odoo shell against this isolated database to set a
+unique administrator password, grant Purchase manager and Inventory user access,
+use a fictional company identity, and deactivate scheduled jobs and outbound
+mail servers. Never expose the initially created administrator credentials.
+
+The optional [generator guide](scripts/README.md) describes the explicit target
+and opt-in needed to populate this exact demo database. It is not run during
+installation or startup. Generation must be a deliberate separate operation.
+The original business database name is always rejected by the generator.
+Its full ORM generation was validated on 1.2.0; its 1.3.0 version guard is tested,
+but generation was not repeated during publication preparation.
+
+Start and inspect only this environment:
+
+```sh
+docker compose --env-file .env.demo -f compose.demo.yml up -d --wait
+docker compose --env-file .env.demo -f compose.demo.yml ps
+```
+
+## Access
+
+Open <http://127.0.0.1:8074/web/login?db=supplier_evaluation_demo> using the
+credentials you configured. Navigate to **Purchase → Avaluació de proveïdors**,
+open a supplier and select **Avaluació OTD**.
+
+The service is local, not a hosted public demo. The database manager is hidden
+and the database filter selects only `supplier_evaluation_demo`.
+
+## Persistence and operations
+
+Volumes are `odoo-supplier-evaluation-demo_demo-postgres` and
+`odoo-supplier-evaluation-demo_demo-odoo`. Stop without deleting them:
 
 ```sh
 docker compose --env-file .env.demo -f compose.demo.yml stop
 ```
 
-Volums persistents independents:
-
-- `odoo-supplier-evaluation-demo_demo-postgres`
-- `odoo-supplier-evaluation-demo_demo-odoo`
-
-Els serveis tenen `restart: unless-stopped`. El servei web s'ha recreat
-conservant els volums i s'han tornat a comprovar els 100/200 registres.
-No utilitzis `down -v` si vols conservar la demostració.
-
-PostgreSQL només pertany a una xarxa interna sense ports publicats.
-Odoo té una xarxa web separada i publica **només `127.0.0.1:8074`**;
-no s'ha configurat cap escolta pública ni cap publicació a Internet.
-El filtre de bases només admet `supplier_evaluation_demo` i el gestor de
-bases no es publica a la interfície.
-
-Totes les tasques programades tenen `active=False`; el servidor també
-utilitza `max_cron_threads=0`. Els servidors de correu sortint estan
-inactius. No s'instal·la el mòdul ni es regenera el conjunt automàticament
-en reiniciar Odoo.
-
-## Fitxers privats
-
-- `.env.demo`: contrasenyes de PostgreSQL, mestra i web independents.
-- `secrets/odoo-demo.conf`: configuració privada d'Odoo.
-- `credentials/demo-access.txt`: dades d'accés per a l'usuari.
-
-Tots estan exclosos de Git. Els directoris de secrets i credencials estan
-restringits al propietari. La configuració del contenidor és de només lectura.
-Les còpies de seguretat i les evidències són a `backups/permanent-demo-*`.
-El dump de la demostració s'ha verificat amb lectura completa de `pg_restore`.
-
-## Generador i proteccions
-
-La base original `supplier_evaluation` continua bloquejada, encara que
-s'activi l'opció permanent. Només el nom exacte `supplier_evaluation_demo`
-s'admet amb `OTD_DEMO_ALLOW_PERMANENT=1` i un `OTD_DEMO_TARGET_DB` coincident.
-Aquesta base ja està generada; l'ordre següent només la torna a validar:
-
-```sh
-docker compose --env-file .env.demo -f compose.demo.yml exec -T \
-  -e OTD_DEMO_ALLOW_PERMANENT=1 \
-  -e OTD_DEMO_TARGET_DB=supplier_evaluation_demo \
-  odoo-demo /entrypoint.sh odoo shell \
-  -d supplier_evaluation_demo --no-http --max-cron-threads=0 --workers=0 \
-  < scripts/generate_otd_demo.py
-```
-
-El manifest detecta alteracions al conjunt: no repara ni elimina registres.
-Les limitacions del generador són a `scripts/README.md`.
-
-## Conservació de l'original i les còpies temporals
-
-El SHA-256 del contingut lògic complet de `supplier_evaluation` coincideix
-abans i després del desplegament. No s'ha actualitzat ni reiniciat l'Odoo
-original. Les tres instàncies PostgreSQL temporals anteriors conserven els
-mateixos contenidors, estats i volums; no s'han eliminat.
-No s'ha publicat res a GitHub.
+Do not use `down -v` if you want to preserve data. Back up PostgreSQL and the
+Odoo filestore together. Private `.env.demo`, `secrets/`, `credentials/`, dumps
+and raw test evidence are intentionally excluded from the repository.
+The shared addon source is mounted read-only; upgrading installed modules
+still requires a deliberate database upgrade and service restart.

@@ -323,13 +323,18 @@ class _Demo:
                 'suppliers': result, 'external_ids': len(expected), 'company_id': self.company.id}
 
 
+def check_module_version(state, version):
+    """Only known compatible releases; independent of database access."""
+    if state != 'installed' or version not in ('18.0.1.2.0', '18.0.1.3.0'):
+        raise RuntimeError('The target demo database must already have supplier_evaluation 18.0.1.2.0 or 18.0.1.3.0 installed.')
+
+
 def generate_demo(env, expected_database, seed=SEED, allow_permanent=False):
     check_target(env, expected_database, allow_permanent)  # Guard BEFORE any ORM read or write.
     if not all(env.user.has_group(group) for group in ('base.group_system', 'purchase.group_purchase_manager', 'stock.group_stock_user')):
         raise RuntimeError('Use an administrator with purchase manager and stock user permissions.')
     module = env['ir.module.module'].search([('name', '=', 'supplier_evaluation')], limit=1)
-    if module.state != 'installed' or module.latest_version != '18.0.1.2.0':
-        raise RuntimeError('The target demo database must already have supplier_evaluation 18.0.1.2.0 installed.')
+    check_module_version(module.state, module.latest_version)
     demo = _Demo(env, seed)
     # Refuse simultaneous runs rather than creating duplicate documents.
     lock = int.from_bytes(hashlib.sha256(demo.key.encode()).digest()[:8], 'big', signed=True)

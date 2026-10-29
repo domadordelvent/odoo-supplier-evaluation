@@ -2,7 +2,7 @@
 
 `generate_otd_demo.py` crea dades fictícies mitjançant l'ORM d'Odoo 18 i els
 fluxos de `button_confirm()`, `button_validate()` i confirmació de
-renegociacions del mòdul `supplier_evaluation` **18.0.1.2.0**.
+renegociacions del mòdul `supplier_evaluation` **18.0.1.2.0 / 18.0.1.3.0**.
 No instal·la ni actualitza el mòdul.
 
 ## Conjunt fix
@@ -31,9 +31,9 @@ avaluades cadascun. Els preus i quantitats varien, però no ponderen l'OTD.
    interna sense accés al servidor original. Utilitza un filestore i un
    directori de dades separats. No exposis serveis de correu de la còpia.
 2. La base ha de tenir el nom `supplier_evaluation_otd_*` i la versió
-   `18.0.1.2.0` del mòdul ja instal·lada. El generador rebutja explícitament
+   `18.0.1.2.0` o `18.0.1.3.0` del mòdul ja instal·lada. El generador rebutja explícitament
    `supplier_evaluation` i qualsevol altre prefix, excepte la base permanent
-   exacta amb activació explícita descrita a `DEMO.md`.
+   exacta amb activació explícita descrita a `../DEMO.md`.
 3. Utilitza un contenidor Odoo configurat exclusivament per al PostgreSQL
    temporal. Necessita un administrador amb permisos de responsable de
    compres i usuari de magatzem. La seva empresa seleccionada ha de disposar
@@ -67,7 +67,7 @@ retorna `reused_existing_dataset: true` i acaba amb rollback, sense recrear-lo.
 Aquest commit és de PostgreSQL, no un commit Git.
 
 La sortida `OTD_DEMO_RESULT=...` conté els comptadors i percentatges verificats.
-Per veure'ls a la còpia: **Purchase → Orders → Vendors → cerca `[OTD DEMO v1]`
+Per veure'ls a la còpia: **Purchase → Avaluació de proveïdors
 → obre el proveïdor → Avaluació OTD**.
 
 ## Identificació i idempotència
@@ -123,4 +123,8 @@ Proves locals sense Odoo:
 PYTHONDONTWRITEBYTECODE=1 python3 -m unittest discover -s tests -v
 ```
 
-Resultats de la prova ORM i de la segona execució: `tests/DEMO_RESULTS.md`.
+Resultats de la prova ORM i de la segona execució: [resultats històrics](../tests/DEMO_RESULTS.md).
+
+El generador es va validar amb ORM a 18.0.1.2.0; l’acceptació de 18.0.1.3.0
+es comprova amb proves locals del filtre de versions. No s’ha tornat a
+executar el generador durant l’auditoria de publicació.
