@@ -1,0 +1,113 @@
+<odoo>
+    <record id="view_supplier_otd_line_list" model="ir.ui.view">
+        <field name="name">purchase.order.line.supplier.otd.list</field>
+        <field name="model">purchase.order.line</field>
+        <field name="priority">99</field>
+        <field name="arch" type="xml">
+            <list string="Línies avaluades" create="false" edit="false" delete="false" default_order="supplier_otd_completed_at desc,id">
+                <field name="order_id" string="Comanda"/>
+                <field name="product_id"/>
+                <field name="supplier_otd_status" widget="badge" decoration-success="supplier_otd_status == 'on_time'" decoration-danger="supplier_otd_status == 'late'"/>
+                <field name="supplier_otd_deadline"/>
+                <field name="supplier_otd_completed_at"/>
+                <field name="supplier_otd_ordered_qty" optional="hide"/>
+                <field name="company_id" groups="base.group_multi_company"/>
+            </list>
+        </field>
+    </record>
+    <record id="view_supplier_otd_line_form" model="ir.ui.view">
+        <field name="name">purchase.order.line.supplier.otd.form</field>
+        <field name="model">purchase.order.line</field>
+        <field name="priority">99</field>
+        <field name="arch" type="xml">
+            <form string="Línia avaluada" create="false" edit="false" delete="false" duplicate="false">
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="order_id"/>
+                            <field name="product_id"/>
+                            <field name="supplier_otd_supplier_id" string="Proveïdor capturat"/>
+                            <field name="company_id" groups="base.group_multi_company"/>
+                        </group>
+                        <group>
+                            <field name="supplier_otd_status" widget="badge" decoration-success="supplier_otd_status == 'on_time'" decoration-danger="supplier_otd_status == 'late'"/>
+                            <field name="supplier_otd_deadline"/>
+                            <field name="supplier_otd_completed_at"/>
+                            <field name="supplier_otd_confirmation_id"/>
+                        </group>
+                        <group>
+                            <field name="supplier_otd_ordered_qty" string="Quantitat demanada capturada"/>
+                            <field name="supplier_otd_received_qty" string="Quantitat rebuda capturada"/>
+                            <field name="supplier_otd_uom_id"/>
+                            <field name="supplier_otd_captured_at"/>
+                        </group>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+    <record id="action_supplier_otd_lines" model="ir.actions.act_window">
+        <field name="name">Línies avaluades</field>
+        <field name="res_model">purchase.order.line</field>
+        <field name="view_mode">list,form</field>
+        <field name="view_ids" eval="[(5, 0, 0), (0, 0, {'view_mode': 'list', 'view_id': ref('view_supplier_otd_line_list')}), (0, 0, {'view_mode': 'form', 'view_id': ref('view_supplier_otd_line_form')})]"/>
+    </record>
+    <record id="view_supplier_otd_list" model="ir.ui.view">
+        <field name="name">res.partner.supplier.otd.list</field>
+        <field name="model">res.partner</field>
+        <field name="priority">99</field>
+        <field name="arch" type="xml">
+            <list string="Avaluació de proveïdors" create="false" edit="false" delete="false" default_order="supplier_otd_display desc,name,id">
+                <field name="name" string="Proveïdor"/>
+                <field name="supplier_otd_has_data" column_invisible="True"/>
+                <field name="supplier_otd_percentage" column_invisible="True"/>
+                <field name="supplier_otd_display" string="OTD" widget="badge" width="150px"
+                       decoration-muted="not supplier_otd_has_data"
+                       decoration-danger="supplier_otd_has_data and supplier_otd_percentage &lt; 50"
+                       decoration-warning="supplier_otd_has_data and supplier_otd_percentage &gt;= 50 and supplier_otd_percentage &lt; 80"
+                       decoration-success="supplier_otd_has_data and supplier_otd_percentage &gt;= 80"/>
+                <field name="supplier_otd_evaluated_count" width="160px"/>
+                <field name="supplier_otd_on_time_count" width="150px"/>
+                <field name="supplier_otd_late_count" width="150px"/>
+            </list>
+        </field>
+    </record>
+    <record id="view_supplier_otd_search" model="ir.ui.view">
+        <field name="name">res.partner.supplier.otd.search</field>
+        <field name="model">res.partner</field>
+        <field name="priority">99</field>
+        <field name="arch" type="xml">
+            <search string="Avaluació de proveïdors">
+                <field name="name" string="Proveïdor"/>
+                <filter name="otd_below_50" string="OTD inferior al 50 %" domain="[('supplier_otd_percentage', '&lt;', 50)]"/>
+                <separator/>
+                <filter name="otd_with_data" string="Amb dades" domain="[('supplier_otd_has_data', '=', True)]"/>
+                <filter name="otd_no_data" string="Sense dades" domain="[('supplier_otd_has_data', '=', False)]"/>
+            </search>
+        </field>
+    </record>
+    <!-- Primary derived form: only our action hides the native purchase KPI. -->
+    <record id="view_supplier_otd_form" model="ir.ui.view">
+        <field name="name">res.partner.supplier.otd.form</field>
+        <field name="model">res.partner</field>
+        <field name="inherit_id" ref="base.view_partner_form"/>
+        <field name="mode">primary</field>
+        <field name="priority">99</field>
+        <field name="arch" type="xml">
+            <xpath expr="//button[.//field[@name='on_time_rate']]" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </xpath>
+        </field>
+    </record>
+    <record id="action_supplier_otd_overview" model="ir.actions.act_window">
+        <field name="name">Avaluació de proveïdors</field>
+        <field name="res_model">res.partner</field>
+        <field name="view_mode">list,form</field>
+        <field name="domain">[('supplier_rank', '&gt;', 0)]</field>
+        <field name="context">{}</field>
+        <field name="search_view_id" ref="view_supplier_otd_search"/>
+        <field name="view_ids" eval="[(5, 0, 0), (0, 0, {'view_mode': 'list', 'view_id': ref('view_supplier_otd_list')}), (0, 0, {'view_mode': 'form', 'view_id': ref('view_supplier_otd_form')})]"/>
+    </record>
+    <menuitem id="menu_supplier_otd_overview" name="Avaluació de proveïdors" parent="purchase.menu_purchase_root"
+              action="action_supplier_otd_overview" sequence="55" groups="purchase.group_purchase_user"/>
+</odoo>

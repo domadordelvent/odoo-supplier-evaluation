@@ -1,13 +1,14 @@
 # Supplier Evaluation
 
-Mòdul per a Odoo 18 Community, versió de codi `18.0.1.2.0`.
+Mòdul per a Odoo 18 Community, versió de codi `18.0.1.3.0`.
 Dependències: `base`, `purchase`, `stock`, `purchase_stock`.
 
-**Estat: OTD agregat per proveïdor implementat i validat en una base temporal
-independent: 118 proves d'integració superades (21 agregat i 97 preexistents).**
-La base original `supplier_evaluation` es manté a `18.0.1.1.0`; la nova versió
-agregada no s'hi ha actualitzat ni activat.
-Els resultats actuals i anteriors es documenten a `tests/RESULTS.md`.
+**Estat: nova interfície OTD implementada i validada en una còpia temporal:
+133 proves d'integració superades i comprovació amb Chromium sobre els deu
+proveïdors ficticis.**
+Les bases permanents es mantenen a `18.0.1.2.0`; la interfície `18.0.1.3.0`
+encara no s'hi ha activat. No s'ha fet cap commit d'aquesta fase.
+Els resultats i les limitacions es documenten a `tests/UI_RESULTS.md`.
 
 ## Objectiu i separació de mètriques
 
@@ -19,6 +20,42 @@ tolerància de 24 hores. La puntualitat i la fiabilitat són independents:
   `late`; només s'assigna `on_time` si tots tenen dades suficients i són puntuals.
 - Fiabilitat: conservació del compromís original conegut i historial de les
   transicions posteriors de data, sense puntuacions globals.
+
+## Interfície OTD (versió 18.0.1.3.0)
+
+La nova ruta és **Purchase → Avaluació de proveïdors**. És una acció pròpia:
+no canvia les accions, el Kanban ni les llistes estàndard de Contactes.
+La llista conté nom, OTD, línies avaluades, puntuals i tardanes. El percentatge
+és una etiqueta nativa amb colors: menys de 50 % vermell, de 50 a menys de
+80 % ambre i de 80 a 100 % verd. Sense resultats es mostra **Sense dades**,
+sense classificar el proveïdor com a 0 %.
+
+La columna OTD ordena numèricament en ascendent/descendent, amb els casos
+sense dades al final i abans d'aplicar la paginació. El filtre **OTD inferior
+al 50 %** exclou els casos sense dades. També hi ha filtres **Amb dades** i
+**Sense dades**.
+
+Clicant el proveïdor s'obre la fitxa normal. La pestanya **Avaluació OTD**
+mostra el percentatge gran, un `progressbar` natiu i tres comptadors compactes.
+**Veure línies avaluades** obre una llista i formulari de consulta de les
+captures que justifiquen el resultat. No hi ha gràfics, JavaScript ni CSS
+personalitzats, ni dependències noves per al mòdul.
+
+Els camps calculats existents i la seva elegibilitat s'han reutilitzat en un
+únic domini compartit. Per ordenar camps no emmagatzemats es fa una consulta
+agregada derivada de la selecció ORM de línies autoritzades. No es crea una
+taula d'estadístiques ni es guarden percentatges dependents d'empresa.
+L'ordenació només afegeix capacitat als nostres camps OTD; l'ordre per defecte
+de Contactes es conserva. Aquesta capacitat no depèn del context de l'acció,
+perquè Odoo 18 no el garanteix en les metadades de `get_views`.
+
+Els permisos i regles de compres, la selecció d'empreses i el proveïdor
+capturat continuen limitant comptadors, filtres, ordenació i línies de detall.
+El detall és de només lectura. Les captures congelades no s'han modificat.
+
+La nova versió encara requereix autorització d'actualització per veure-la a
+`supplier_evaluation` o `supplier_evaluation_demo`. Els percentatges de la
+versió permanent actual continuen a la pestanya prèvia del proveïdor.
 
 ## OTD per línia completada
 
@@ -81,7 +118,8 @@ Ruta després d'activar la versió `18.0.1.2.0` a la base corresponent:
 **Compres → Comandes → Proveïdors → obre el proveïdor → Avaluació OTD**.
 En anglès: **Purchase → Orders → Vendors → Avaluació OTD**. També es pot
 obrir la mateixa fitxa des de Contactes. Cal ser usuari o responsable de compres.
-La base original encara no té activada aquesta nova pestanya.
+La pestanya bàsica agregada ja és a les bases permanents `18.0.1.2.0`;
+la presentació millorada i la llista dedicada són noves de `18.0.1.3.0`.
 
 La fitxa mostra **Percentatge OTD**, **Línies avaluades**, **Línies puntuals**
 i **Línies tardanes**. La fórmula és:
@@ -306,10 +344,11 @@ els mètodes de producció amb substituts de les declaracions, cursor i part
 del model base d'Odoo.
 No validen la integració amb l'ORM ni el SQL contra PostgreSQL.
 
-S'han superat **118 proves reals TransactionCase**: 32 d'historial, 25 de
-confirmacions, 21 de l'assistent i les vistes, 19 d'OTD per línia i 21 de
-l'agregat per proveïdor. L'execució completa va finalitzar en 15,369 segons,
-amb zero errors i zero fallades.
+S'han superat **133 proves reals TransactionCase**: 32 d'historial, 25 de
+confirmacions, 21 de l'assistent i les vistes, 19 d'OTD per línia, 21 de
+l'agregat i 15 de la nova interfície. L'execució completa va finalitzar en
+17,726 segons, amb zero errors i zero fallades. Els 15 casos UI s'han tornat
+a comprovar després dels últims ajustos de maquetació.
 
 S'ha restaurat una còpia verificada en un PostgreSQL separat, dins d'una
 xarxa Docker interna, amb un filestore independent. Només s'ha actualitzat
@@ -326,8 +365,37 @@ client. La instal·lació de les vistes i tota la suite s'han completat sense
 avisos ni errors als registres. No s'ha executat una prova de navegador real,
 un tour JavaScript ni una prova de càrrega amb sessions concurrents.
 
-La comparació SHA-256 dels dumps lògics abans i després confirma que la base
-original no ha canviat. També s'ha verificat la integritat del filestore.
+La comparació de les taules confirma que les dades de negoci i les captures
+no han canviat. Els dumps complets reflecteixen activitat tècnica de sessions
+concurrents; vegeu `tests/UI_RESULTS.md` per al detall.
 No s'ha executat el generador de dades fictícies. Les còpies, els registres
 i les comprovacions es conserven a `backups/`, exclòs de Git.
 Les escriptures SQL externes a l'ORM no queden cobertes pel seguiment de dates.
+
+## Generador de demostració
+
+El generador extern `scripts/generate_otd_demo.py` prepara 10 proveïdors,
+100 comandes i 200 línies, amb OTD diferents. Utilitza l'ORM i només admet
+bases temporals `supplier_evaluation_otd_*` i la demostració independent
+`supplier_evaluation_demo` amb activació explícita; `supplier_evaluation`
+està bloquejada. No s'ha executat a la base original.
+
+Instruccions i limitacions: [scripts/README.md](../../scripts/README.md).
+Resultats: [tests/DEMO_RESULTS.md](../../tests/DEMO_RESULTS.md).
+
+## Demostració permanent independent
+
+La base neta `supplier_evaluation_demo` està disponible només a
+`http://127.0.0.1:8074`, amb credencials pròpies, tasques programades
+desactivades i volums persistents. Conté exactament 10 proveïdors, 100
+comandes i 200 línies fictícies; OTD de 10 % a 100 %.
+Configuració, accés i gestió: [DEMO.md](../../DEMO.md).
+La base original i les còpies temporals anteriors es conserven intactes.
+
+### Ajustos finals de la vista OTD (18.0.1.3.0)
+
+L'acció **Purchase → Avaluació de proveïdors** utilitza un formulari primari
+propi que amaga «On-time Rate». Els formularis estàndard d'Odoo conserven
+l'indicador. La barra continua utilitzant el component natiu; una única
+regla SCSS limitada a la pista OTD n'amplia l'amplada. El detall mostra
+comanda, producte, termini OTD, finalització i resultat congelats.

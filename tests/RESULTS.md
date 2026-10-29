@@ -1,3 +1,71 @@
+## Ajustos finals UI — 2026-10-30
+
+135 proves d'integració, 43 proves locals i Chromium superats sobre una
+còpia temporal. Supplier 05: 20 línies, 10 puntuals i 10 tardanes.
+Indicador estàndard conservat fora de l'acció pròpia, barra ampliada.
+Bases permanents i captures congelades intactes. Vegeu `UI_RESULTS.md`.
+
+# Interfície OTD nativa — 18.0.1.3.0, pendent d'activació
+
+Data: 2026-10-29. **133 proves ORM superades** (15 noves d'interfície),
+43 proves locals superades i comprovació real amb Chromium sobre els deu
+proveïdors ficticis en una còpia temporal independent. Els 15 casos UI
+s'han tornat a executar després dels últims ajustos de maquetació.
+
+La llista ordena als dos sentits, el filtre < 50 % retorna quatre proveïdors,
+les deu fitxes mostren els valors 10–100 % i el botó de detall retorna les
+20 línies corresponents (8 puntuals i 12 tardanes en el cas del 40 %).
+També s'ha comprovat l'etiqueta «Sense dades» i l'absència d'errors JavaScript.
+
+No s'ha actualitzat cap base permanent ni fet cap commit. Es conserven les
+dades de negoci, les captures OTD, l'esquema i la versió `18.0.1.2.0` de totes
+dues bases. Els dumps complets sí que difereixen per activitat concurrent:
+presència/notificacions/dispositiu a l'original i ajustos de configuració,
+valors per defecte i presència a la demo. Els registres HTTP confirmen aquesta
+activitat; no s'ha revertit. Les captures de les 200 línies de la demo
+coincideixen exactament amb les de la còpia de prova.
+
+Detalls, scripts de prova i captures: [UI_RESULTS.md](UI_RESULTS.md).
+
+---
+
+# Demostració permanent neta
+
+Base `supplier_evaluation_demo`, mòdul `18.0.1.2.0`, creada des de zero sense
+mostres d'Odoo ni restauració de l'original. Llavor `180120`: 10 proveïdors,
+100 comandes, 200 línies i OTD del 10 % al 100 %, verificats amb el generador
+i amb consultes autenticades a la interfície web local del port 8074.
+La segona execució reutilitza el conjunt sense duplicats.
+
+43 proves locals superades. Els nous casos exigeixen una activació explícita
+per a la base permanent i confirmen que `supplier_evaluation` continua
+bloquejada, fins i tot amb aquesta activació.
+
+El primer accés des de l'host va trobar el port sense publicar en una xarxa
+exclusivament interna. S'ha separat la xarxa web de la xarxa interna de
+PostgreSQL i vinculat el port exclusivament a `127.0.0.1`. Els controls finals
+confirmen HTTP 200, autenticació, vista OTD, persistència després de recrear
+el servei, zero tasques programades actives i servidor de correu inactiu.
+
+La base original conserva el mateix SHA-256 lògic. Les tres instàncies
+temporals anteriors conserven identificadors, estats i volums. No s'ha
+publicat res a GitHub. Instruccions i credencials locals: [DEMO.md](../DEMO.md).
+
+---
+
+# Generador de demostració — validació en base temporal
+
+Data: 2026-10-29. Mòdul `18.0.1.2.0`, sense canvis al seu esquema.
+
+Generades i validades amb ORM 100 comandes i 200 línies de 10 proveïdors.
+Segona execució sense duplicats, amb IDs i hashes de 28 taules idèntics.
+Les dades que ja existien a la còpia no s'han modificat. 41 proves locals
+superades. Detalls, percentatges i limitacions: [DEMO_RESULTS.md](DEMO_RESULTS.md).
+
+No s'ha executat el generador a `supplier_evaluation` ni publicat res a GitHub.
+
+---
+
 # OTD agregat per proveïdor — pendent d'activació a la base original
 
 Data local: 2026-10-29. Execució UTC: 2026-10-28.

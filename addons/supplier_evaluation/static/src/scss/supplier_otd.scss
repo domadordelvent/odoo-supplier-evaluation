@@ -1,0 +1,5 @@
+// The native progress widget fixes its internal track at 100px.
+// Stretch only the OTD track; leave other Odoo progress bars unchanged.
+.o_supplier_otd_progress .o_progress {
+    flex: 1;
+}

@@ -13,6 +13,7 @@ from odoo.addons.supplier_evaluation.tests.test_deadline_confirmation import Tes
 from odoo.addons.supplier_evaluation.tests.test_deadline_wizard import TestDeadlineWizard
 from odoo.addons.supplier_evaluation.tests.test_line_otd import TestLineOTD
 from odoo.addons.supplier_evaluation.tests.test_supplier_otd import TestSupplierOTD
+from odoo.addons.supplier_evaluation.tests.test_supplier_otd_ui import TestSupplierOTDUI
 
 try:
     suite = unittest.TestSuite([
@@ -21,6 +22,7 @@ try:
         unittest.defaultTestLoader.loadTestsFromTestCase(TestDeadlineWizard),
         unittest.defaultTestLoader.loadTestsFromTestCase(TestLineOTD),
         unittest.defaultTestLoader.loadTestsFromTestCase(TestSupplierOTD),
+        unittest.defaultTestLoader.loadTestsFromTestCase(TestSupplierOTDUI),
     ])
     result = unittest.TextTestRunner(verbosity=2, failfast=True).run(suite)
     if not result.wasSuccessful():

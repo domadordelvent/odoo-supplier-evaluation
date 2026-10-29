@@ -7,23 +7,40 @@
             <xpath expr="//notebook" position="inside">
                 <page name="supplier_otd" string="Avaluació OTD" groups="purchase.group_purchase_user">
                     <field name="supplier_otd_has_data" invisible="1"/>
-                    <group string="OTD per línia completada">
-                        <label for="supplier_otd_percentage"/>
-                        <div>
-                            <span invisible="supplier_otd_has_data">Sense dades</span>
-                            <span invisible="not supplier_otd_has_data">
-                                <field name="supplier_otd_percentage" class="oe_inline" readonly="1"/> %
+                    <div class="row g-3 align-items-center mb-3">
+                        <div class="col-12 col-lg-4">
+                            <div class="small text-muted mb-1">Puntualitat de lliurament</div>
+                            <span invisible="supplier_otd_has_data" class="fs-4 text-muted">Sense dades</span>
+                            <span invisible="not supplier_otd_has_data" class="display-5 fw-semibold">
+                                <field name="supplier_otd_percentage" class="oe_inline" readonly="1"
+                                       decoration-danger="supplier_otd_percentage &lt; 50"
+                                       decoration-warning="supplier_otd_percentage &gt;= 50 and supplier_otd_percentage &lt; 80"
+                                       decoration-success="supplier_otd_percentage &gt;= 80"/> %
                             </span>
+                            <div class="mt-2 o_supplier_otd_progress" invisible="not supplier_otd_has_data">
+                                <field name="supplier_otd_percentage" widget="progressbar" readonly="1" class="w-100"/>
+                            </div>
                         </div>
-                        <field name="supplier_otd_evaluated_count" readonly="1"/>
-                        <field name="supplier_otd_on_time_count" readonly="1"/>
-                        <field name="supplier_otd_late_count" readonly="1"/>
-                    </group>
-                    <p class="text-muted">
-                        Cada línia avaluada compta una vegada. Només s'utilitzen resultats OTD
-                        congelats de les empreses seleccionades i accessibles per a l'usuari.
-                        S'exclouen línies sense avaluació, sense dades suficients i comandes cancel·lades.
-                    </p>
+                        <div class="col-12 col-lg-8">
+                            <div class="row g-0 border rounded text-center py-3">
+                                <div class="col-4 border-end">
+                                    <field name="supplier_otd_evaluated_count" readonly="1" class="fs-3 fw-semibold mb-0"/>
+                                    <div class="small text-muted">Avaluades</div>
+                                </div>
+                                <div class="col-4 border-end">
+                                    <field name="supplier_otd_on_time_count" readonly="1" class="fs-3 fw-semibold text-success mb-0"/>
+                                    <div class="small text-muted">Puntuals</div>
+                                </div>
+                                <div class="col-4">
+                                    <field name="supplier_otd_late_count" readonly="1" class="fs-3 fw-semibold text-danger mb-0"/>
+                                    <div class="small text-muted">Tardanes</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <button name="action_open_supplier_otd_lines" type="object" string="Veure línies avaluades"
+                            icon="fa-list" class="btn btn-secondary" invisible="not supplier_otd_has_data"/>
+                    <p class="small text-muted mt-2 mb-0">Cada línia compta una vegada. Empreses seleccionades.</p>
                 </page>
             </xpath>
         </field>

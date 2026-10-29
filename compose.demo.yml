@@ -1,0 +1,64 @@
+name: odoo-supplier-evaluation-demo
+
+services:
+  db-demo:
+    image: postgres:15
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: postgres
+      POSTGRES_USER: odoo_demo
+      POSTGRES_PASSWORD: ${DEMO_POSTGRES_PASSWORD:?Set DEMO_POSTGRES_PASSWORD in .env.demo}
+    volumes:
+      - demo-postgres:/var/lib/postgresql/data
+    networks:
+      - demo-private
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U $$POSTGRES_USER -d postgres"]
+      interval: 5s
+      timeout: 3s
+      retries: 12
+
+  odoo-demo:
+    image: odoo:18.0
+    restart: unless-stopped
+    depends_on:
+      db-demo:
+        condition: service_healthy
+    ports:
+      - "127.0.0.1:8074:8069"
+    environment:
+      HOST: db-demo
+      PORT: "5432"
+      USER: odoo_demo
+      PASSWORD: ${DEMO_POSTGRES_PASSWORD:?Set DEMO_POSTGRES_PASSWORD in .env.demo}
+    command:
+      - odoo
+      - -d
+      - supplier_evaluation_demo
+      - --db-filter=^supplier_evaluation_demo$
+      - --no-database-list
+      - --max-cron-threads=0
+      - --workers=0
+    volumes:
+      - ./addons:/mnt/extra-addons:ro
+      - ./secrets/odoo-demo.conf:/etc/odoo/odoo.conf:ro
+      - demo-odoo:/var/lib/odoo
+    networks:
+      - demo-private
+      - demo-web
+    healthcheck:
+      test: ["CMD", "python3", "-c", "import urllib.request; urllib.request.urlopen('http://127.0.0.1:8069/web/health?db_server_status=1', timeout=4).read()"]
+      interval: 15s
+      timeout: 5s
+      retries: 5
+      start_period: 30s
+
+networks:
+  demo-private:
+    internal: true
+  demo-web:
+    driver: bridge
+
+volumes:
+  demo-postgres:
+  demo-odoo:
