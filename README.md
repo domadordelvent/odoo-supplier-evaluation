@@ -37,6 +37,14 @@ The `.invalid` email addresses are demonstration placeholders.
 
 ![Read-only evaluated purchase lines with deadlines, completion dates and outcomes](docs/screenshots/evaluated-lines.png)
 
+## Video walkthrough
+
+A YouTube walkthrough will be linked here when available.
+
+<!-- Add the public YouTube video URL here after the video is published.
+     Example markup: [Watch the walkthrough on YouTube](PUBLIC_VIDEO_URL)
+     No video is generated or hosted by this repository. -->
+
 ## Requirements and installation
 
 - A working **Odoo 18 Community** installation with its normal Python,

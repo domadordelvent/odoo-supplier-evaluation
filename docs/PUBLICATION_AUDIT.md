@@ -5,7 +5,7 @@
 # Publication audit — 2026-10-30
 
 Release: **18.0.1.3.0**, matching `addons/supplier_evaluation/__manifest__.py`.
-Baseline: `c0dcff8` (final validated interface and demo). This audit prepares
+Baseline: `4005c6e` (final validated interface and demo). This audit prepares
 repository documentation; it does not publish or change deployed databases.
 
 ## Packaging and portability
@@ -112,12 +112,13 @@ Fictional `.invalid` addresses and test-only identities are intentional.
 
 ## Remaining limitations and publication choices
 
-- Existing Git author/committer metadata includes a non-GitHub-noreply email.
-  Publishing the existing history exposes that attribution. No history rewrite
-  or author identity change was performed; the owner should decide whether
-  to retain it before publishing.
-- No complete English UI translation, large-volume performance benchmark,
-  mobile certification, Enterprise certification or other-major-version support.
+- The original author-email finding was resolved before publication: all six
+  commits were rewritten to the owner's GitHub noreply address, preserving
+  names, dates, messages and trees. The original history remains only in a
+  private recovery copy outside this repository and must never be published.
+- English source and Catalan translations are now validated; other translations,
+  large-volume performance benchmarks, mobile certification, Enterprise
+  certification and other-major-version support are not supplied.
 - Frozen history has no legacy backfill and is not tamper-proof against direct
   SQL administrators. Supplier parents/children are not consolidated.
 - The demo generator was fully ORM-validated on 1.2.0; only its compatibility
@@ -125,9 +126,10 @@ Fictional `.invalid` addresses and test-only identities are intentional.
   and fixed historical dates are intentional.
 - Docker examples are local conveniences, not production deployment recipes.
   Image tags are mutable; the exact tested digest is recorded above.
-- Repository owner, visibility, optional author/website metadata and private
-  vulnerability reporting settings remain publication-time choices.
+- The publication target is the public repository
+  `domadordelvent/odoo-supplier-evaluation`. Optional manifest author/website
+  metadata and private vulnerability reporting settings can be completed later.
 
-The repository is technically ready for publication, subject to the owner's
-Git-attribution privacy choice and normal final review. No GitHub operation
-has been performed.
+The repository has passed its final local privacy review. This historical
+report is retained alongside the newer bilingual validation; authentication
+and the actual publication are separate operations.
