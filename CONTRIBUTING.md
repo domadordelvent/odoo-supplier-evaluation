@@ -12,4 +12,5 @@ real business data, private screenshots or local credentials.
 The addon is LGPL-3. Contributions should use that license. No external
 services, GitHub account or project Docker setup is required to develop or
 install the addon. Technical documentation is currently partly Catalan;
-the main README and publication guides are in English.
+the main README and publication guides are in English. Interface source strings
+are English; maintain the standard Catalan catalog and see [I18N](docs/I18N.md).

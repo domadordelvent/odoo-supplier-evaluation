@@ -13,19 +13,22 @@ _ORIGINAL_FIELDS = {
 class PurchaseOrderLine(models.Model):
     _inherit = "purchase.order.line"
 
-    supplier_original_date = fields.Datetime(readonly=True, copy=False)
-    supplier_original_date_known = fields.Boolean(readonly=True, copy=False)
+    supplier_original_date = fields.Datetime(readonly=True, copy=False, string="Original supplier commitment")
+    supplier_original_date_known = fields.Boolean(readonly=True, copy=False, string="Original commitment known")
     # No True default: rows predating the upgrade must keep an unknown origin.
-    supplier_original_date_pending = fields.Boolean(readonly=True, copy=False)
+    supplier_original_date_pending = fields.Boolean(readonly=True, copy=False, string="Original commitment pending")
     supplier_deadline_revision_ids = fields.One2many(
         "supplier.evaluation.deadline.revision", "purchase_line_id", readonly=True, copy=False,
+        string="Deadline history",
     )
     supplier_postponement_count = fields.Integer(
         compute="_compute_supplier_postponement_count", compute_sudo=True,
+        string="Postponement count",
     )
     supplier_deadline_confirmation_ids = fields.One2many(
         "supplier.evaluation.deadline.confirmation", "purchase_line_id",
         readonly=True, copy=False,
+        string="Confirmed renegotiations",
     )
 
     @api.depends("supplier_deadline_revision_ids.revision_type")
@@ -40,10 +43,10 @@ class PurchaseOrderLine(models.Model):
     def action_open_supplier_deadline_history(self):
         self.ensure_one()
         if not isinstance(self.id, int):
-            raise UserError(_("Cal desar una línia de producte abans de consultar-ne els terminis."))
+            raise UserError(_("Save a product line before viewing its deadlines."))
         self.check_access("read")
         if self.display_type:
-            raise UserError(_("Cal desar una línia de producte abans de consultar-ne els terminis."))
+            raise UserError(_("Save a product line before viewing its deadlines."))
         action = self.env["ir.actions.actions"]._for_xml_id("supplier_evaluation.action_deadline_revisions")
         action["domain"] = [("purchase_line_id", "=", self.id)]
         return action
@@ -94,7 +97,7 @@ class PurchaseOrderLine(models.Model):
         if any(_ORIGINAL_FIELDS.intersection(vals) for vals in vals_list) or any(
             f"default_{name}" in self.env.context for name in _ORIGINAL_FIELDS
         ):
-            raise AccessError(_("Els compromisos originals els gestiona el mòdul."))
+            raise AccessError(_("Original commitments are managed by the module."))
         # Serialize line insertion with approval, including context defaults.
         order_ids = {
             vals.get("order_id", self.env.context.get("default_order_id"))
@@ -115,14 +118,14 @@ class PurchaseOrderLine(models.Model):
 
     def write(self, vals):
         if _ORIGINAL_FIELDS.intersection(vals):
-            raise AccessError(_("El compromís original i l'historial estan protegits."))
+            raise AccessError(_("The original commitment and history are protected."))
         if {"order_id", "company_id"}.intersection(vals):
             for line in self:
                 if line.sudo().supplier_deadline_revision_ids and any(
                     vals[field] != line[field].id
                     for field in ("order_id", "company_id") if field in vals
                 ):
-                    raise AccessError(_("No es pot traslladar una línia amb historial de terminis."))
+                    raise AccessError(_("A line with deadline history cannot be moved."))
         if "date_planned" not in vals:
             return super().write(vals)
         # new()/onchange records (including virtual records with _origin) must

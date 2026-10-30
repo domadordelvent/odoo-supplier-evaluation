@@ -24,38 +24,39 @@ class PurchaseLineOTD(models.Model):
     _inherit = "purchase.order.line"
 
     supplier_otd_status = fields.Selection([
-        ("on_time", "Puntual"), ("late", "Amb retard"), ("unknown", "Desconegut"),
-    ], string="OTD línia completada", readonly=True, copy=False,
-        help="Una observació per línia completada; tolerància de 24 hores. Buit: encara no avaluada.")
-    supplier_otd_deadline = fields.Datetime(string="Termini OTD", readonly=True, copy=False)
-    supplier_otd_completed_at = fields.Datetime(string="Línia completada el", readonly=True, copy=False)
-    supplier_otd_captured_at = fields.Datetime(readonly=True, copy=False)
+        ("on_time", "On time"), ("late", "Late"), ("unknown", "Unknown"),
+    ], string="Completed-line OTD", readonly=True, copy=False,
+        help="One observation per completed line; 24-hour tolerance. Empty: not yet evaluated.")
+    supplier_otd_deadline = fields.Datetime(string="OTD deadline", readonly=True, copy=False)
+    supplier_otd_completed_at = fields.Datetime(string="Delivery completed on", readonly=True, copy=False)
+    supplier_otd_captured_at = fields.Datetime(readonly=True, copy=False, string="OTD captured on")
     supplier_otd_confirmation_id = fields.Many2one(
         "supplier.evaluation.deadline.confirmation", readonly=True, copy=False,
         ondelete="restrict", check_company=True,
+        string="Applied agreement",
     )
-    supplier_otd_ordered_qty = fields.Float(readonly=True, copy=False, digits="Product Unit of Measure")
-    supplier_otd_received_qty = fields.Float(readonly=True, copy=False, digits="Product Unit of Measure")
-    supplier_otd_uom_id = fields.Many2one("uom.uom", readonly=True, copy=False, ondelete="restrict")
-    supplier_otd_supplier_id = fields.Many2one("res.partner", readonly=True, copy=False, ondelete="restrict")
+    supplier_otd_ordered_qty = fields.Float(readonly=True, copy=False, digits="Product Unit of Measure", string="Captured ordered quantity")
+    supplier_otd_received_qty = fields.Float(readonly=True, copy=False, digits="Product Unit of Measure", string="Captured received quantity")
+    supplier_otd_uom_id = fields.Many2one("uom.uom", readonly=True, copy=False, ondelete="restrict", string="Captured unit of measure")
+    supplier_otd_supplier_id = fields.Many2one("res.partner", readonly=True, copy=False, ondelete="restrict", string="Captured supplier")
 
     @api.model_create_multi
     def create(self, vals_list):
         if any(_OTD_FIELDS.intersection(vals) for vals in vals_list) or any(
             f"default_{name}" in self.env.context for name in _OTD_FIELDS
         ):
-            raise AccessError(_("L'OTD només es pot capturar en completar una línia."))
+            raise AccessError(_("OTD can only be captured when completing a line."))
         return super().create(vals_list)
 
     def write(self, vals):
         if _OTD_FIELDS.intersection(vals):
-            raise AccessError(_("La captura OTD de la línia és immutable."))
+            raise AccessError(_("The line OTD snapshot is immutable."))
         return super().write(vals)
 
     @api.ondelete(at_uninstall=False)
     def _unlink_except_supplier_otd(self):
         if self.filtered("supplier_otd_captured_at"):
-            raise UserError(_("No es poden eliminar línies amb captures OTD."))
+            raise UserError(_("Lines with OTD snapshots cannot be deleted."))
 
     def _supplier_otd_is_eligible(self):
         self.ensure_one()

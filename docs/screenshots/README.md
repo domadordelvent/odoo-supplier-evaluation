@@ -1,7 +1,7 @@
 # Screenshot provenance and privacy review
 
 These PNG files were copied unchanged from the validated, independent
-fictional demonstration environment running Odoo 18 Community and Supplier
+temporary copy of the fictional demonstration dataset running Odoo 18 Community and Supplier
 Evaluation 18.0.1.3.0. They are application screenshots, not browser-window
 captures: no address bar, host path, cookie, token or credential is present.
 
@@ -17,6 +17,7 @@ order references and supplier names all carry the demo namespace. The email
 No real customer/supplier details, addresses, phone numbers, personal names or
 private company identifiers are shown. The PNG metadata contains no text chunks.
 
-Screenshots retain the current Catalan UI labels. The dates reflect the fixed
+The main screenshots show the English source interface;
+`supplier-dashboard-ca.png` shows the equivalent Catalan dashboard. The dates reflect the fixed
 fictional dataset and the browser's date presentation; they are not production
 records. Do not replace these images with captures from a real database.

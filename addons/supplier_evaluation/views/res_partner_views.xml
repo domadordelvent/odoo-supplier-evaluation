@@ -5,12 +5,12 @@
         <field name="inherit_id" ref="base.view_partner_form"/>
         <field name="arch" type="xml">
             <xpath expr="//notebook" position="inside">
-                <page name="supplier_otd" string="Avaluació OTD" groups="purchase.group_purchase_user">
+                <page name="supplier_otd" string="OTD evaluation" groups="purchase.group_purchase_user">
                     <field name="supplier_otd_has_data" invisible="1"/>
                     <div class="row g-3 align-items-center mb-3">
                         <div class="col-12 col-lg-4">
-                            <div class="small text-muted mb-1">Puntualitat de lliurament</div>
-                            <span invisible="supplier_otd_has_data" class="fs-4 text-muted">Sense dades</span>
+                            <div class="small text-muted mb-1">Delivery punctuality</div>
+                            <span invisible="supplier_otd_has_data" class="fs-4 text-muted">No data</span>
                             <span invisible="not supplier_otd_has_data" class="display-5 fw-semibold">
                                 <field name="supplier_otd_percentage" class="oe_inline" readonly="1"
                                        decoration-danger="supplier_otd_percentage &lt; 50"
@@ -25,22 +25,22 @@
                             <div class="row g-0 border rounded text-center py-3">
                                 <div class="col-4 border-end">
                                     <field name="supplier_otd_evaluated_count" readonly="1" class="fs-3 fw-semibold mb-0"/>
-                                    <div class="small text-muted">Avaluades</div>
+                                    <div class="small text-muted">Evaluated</div>
                                 </div>
                                 <div class="col-4 border-end">
                                     <field name="supplier_otd_on_time_count" readonly="1" class="fs-3 fw-semibold text-success mb-0"/>
-                                    <div class="small text-muted">Puntuals</div>
+                                    <div class="small text-muted">On time</div>
                                 </div>
                                 <div class="col-4">
                                     <field name="supplier_otd_late_count" readonly="1" class="fs-3 fw-semibold text-danger mb-0"/>
-                                    <div class="small text-muted">Tardanes</div>
+                                    <div class="small text-muted">Late</div>
                                 </div>
                             </div>
                         </div>
                     </div>
-                    <button name="action_open_supplier_otd_lines" type="object" string="Veure línies avaluades"
+                    <button name="action_open_supplier_otd_lines" type="object" string="View evaluated lines"
                             icon="fa-list" class="btn btn-secondary" invisible="not supplier_otd_has_data"/>
-                    <p class="small text-muted mt-2 mb-0">Cada línia compta una vegada. Empreses seleccionades.</p>
+                    <p class="small text-muted mt-2 mb-0">Each line counts once. Selected companies.</p>
                 </page>
             </xpath>
         </field>

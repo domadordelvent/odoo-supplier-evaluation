@@ -3,16 +3,16 @@
         <field name="name">supplier.deadline.confirmation.list</field>
         <field name="model">supplier.evaluation.deadline.confirmation</field>
         <field name="arch" type="xml">
-            <list string="Renegociacions confirmades" create="false" edit="false" delete="false">
-                <field name="order_id" string="Comanda"/>
-                <field name="purchase_line_id" string="Línia"/>
-                <field name="supplier_id" string="Proveïdor"/>
-                <field name="previous_agreed_date" string="Data anterior acceptada"/>
-                <field name="new_agreed_date" string="Nova data acceptada"/>
-                <field name="supplier_attributable" string="Atribuïble al proveïdor"/>
-                <field name="change_direction" string="Direcció"/>
-                <field name="confirmed_by_id" string="Confirmat per"/>
-                <field name="confirmed_at" string="Moment de confirmació"/>
+            <list string="Confirmed renegotiations" create="false" edit="false" delete="false">
+                <field name="order_id" string="Purchase order"/>
+                <field name="purchase_line_id" string="Purchase line"/>
+                <field name="supplier_id" string="Supplier"/>
+                <field name="previous_agreed_date" string="Previous accepted date"/>
+                <field name="new_agreed_date" string="New accepted date"/>
+                <field name="supplier_attributable" string="Attributable to supplier"/>
+                <field name="change_direction" string="Direction"/>
+                <field name="confirmed_by_id" string="Confirmed by"/>
+                <field name="confirmed_at" string="Confirmation time"/>
                 <field name="company_id" groups="base.group_multi_company"/>
             </list>
         </field>
@@ -21,30 +21,30 @@
         <field name="name">supplier.deadline.confirmation.form</field>
         <field name="model">supplier.evaluation.deadline.confirmation</field>
         <field name="arch" type="xml">
-            <form string="Renegociació confirmada" create="false" edit="false" delete="false" duplicate="false">
+            <form string="Confirmed renegotiation" create="false" edit="false" delete="false" duplicate="false">
                 <sheet>
                     <div class="alert alert-info" role="alert">
-                        El compromís original, l'historial i les avaluacions de recepcions completades es conserven.
+                        The original commitment, history and completed receipt evaluations are preserved.
                     </div>
                     <group>
                         <group>
-                            <field name="order_id" string="Comanda"/>
-                            <field name="purchase_line_id" string="Línia"/>
-                            <field name="supplier_id" string="Proveïdor"/>
-                            <field name="revision_id" string="Revisió confirmada"/>
+                            <field name="order_id" string="Purchase order"/>
+                            <field name="purchase_line_id" string="Purchase line"/>
+                            <field name="supplier_id" string="Supplier"/>
+                            <field name="revision_id" string="Confirmed revision"/>
                             <field name="company_id" groups="base.group_multi_company"/>
                         </group>
                         <group>
-                            <field name="previous_agreed_date" string="Data anterior acceptada"/>
-                            <field name="new_agreed_date" string="Nova data acceptada"/>
-                            <field name="change_direction" string="Direcció"/>
-                            <field name="supplier_attributable" string="Atribuïble al proveïdor"/>
-                            <field name="confirmed_by_id" string="Confirmat per"/>
-                            <field name="confirmed_at" string="Moment de confirmació"/>
-                            <field name="previous_confirmation_id" string="Acord anterior"/>
+                            <field name="previous_agreed_date" string="Previous accepted date"/>
+                            <field name="new_agreed_date" string="New accepted date"/>
+                            <field name="change_direction" string="Direction"/>
+                            <field name="supplier_attributable" string="Attributable to supplier"/>
+                            <field name="confirmed_by_id" string="Confirmed by"/>
+                            <field name="confirmed_at" string="Confirmation time"/>
+                            <field name="previous_confirmation_id" string="Previous agreement"/>
                         </group>
                     </group>
-                    <group><field name="justification" string="Justificació"/></group>
+                    <group><field name="justification" string="Justification"/></group>
                 </sheet>
             </form>
         </field>
@@ -53,18 +53,18 @@
         <field name="name">supplier.deadline.confirmation.search</field>
         <field name="model">supplier.evaluation.deadline.confirmation</field>
         <field name="arch" type="xml">
-            <search string="Renegociacions confirmades">
+            <search string="Confirmed renegotiations">
                 <field name="order_id"/><field name="purchase_line_id"/><field name="supplier_id"/>
-                <filter name="supplier_attributable" string="Atribuïbles al proveïdor" domain="[('supplier_attributable', '=', True)]"/>
+                <filter name="supplier_attributable" string="Attributable to supplier" domain="[('supplier_attributable', '=', True)]"/>
                 <group>
-                    <filter name="group_order" string="Comanda" context="{'group_by': 'order_id'}"/>
-                    <filter name="group_supplier" string="Proveïdor" context="{'group_by': 'supplier_id'}"/>
+                    <filter name="group_order" string="Purchase order" context="{'group_by': 'order_id'}"/>
+                    <filter name="group_supplier" string="Supplier" context="{'group_by': 'supplier_id'}"/>
                 </group>
             </search>
         </field>
     </record>
     <record id="action_deadline_confirmations" model="ir.actions.act_window">
-        <field name="name">Renegociacions confirmades</field>
+        <field name="name">Confirmed renegotiations</field>
         <field name="res_model">supplier.evaluation.deadline.confirmation</field>
         <field name="view_mode">list,form</field>
         <field name="view_id" ref="view_deadline_confirmation_list"/>
@@ -75,19 +75,19 @@
         <field name="name">supplier.deadline.revision.list</field>
         <field name="model">supplier.evaluation.deadline.revision</field>
         <field name="arch" type="xml">
-            <list string="Historial de terminis" create="false" edit="false" delete="false">
-                <field name="order_reference" string="Comanda"/>
-                <field name="purchase_line_id" string="Línia"/>
-                <field name="supplier_name" string="Proveïdor"/>
-                <field name="sequence" string="Revisió"/>
-                <field name="previous_date" string="Previsió anterior"/>
-                <field name="new_date" string="Nova previsió"/>
-                <field name="revision_type" string="Tipus"/>
-                <field name="change_direction" string="Direcció"/>
-                <field name="changed_at" string="Moment del canvi"/>
+            <list string="Deadline history" create="false" edit="false" delete="false">
+                <field name="order_reference" string="Purchase order"/>
+                <field name="purchase_line_id" string="Purchase line"/>
+                <field name="supplier_name" string="Supplier"/>
+                <field name="sequence" string="Revision"/>
+                <field name="previous_date" string="Previous planned date"/>
+                <field name="new_date" string="New planned date"/>
+                <field name="revision_type" string="Type"/>
+                <field name="change_direction" string="Direction"/>
+                <field name="changed_at" string="Change time"/>
                 <field name="confirmation_ids" column_invisible="True"/>
                 <field name="company_id" groups="base.group_multi_company"/>
-                <button name="action_open_renegotiation_wizard" type="object" string="Confirmar renegociació" icon="fa-check" groups="purchase.group_purchase_manager" invisible="revision_type != 'technical' or confirmation_ids"/>
+                <button name="action_open_renegotiation_wizard" type="object" string="Confirm renegotiation" icon="fa-check" groups="purchase.group_purchase_manager" invisible="revision_type != 'technical' or confirmation_ids"/>
             </list>
         </field>
     </record>
@@ -95,39 +95,39 @@
         <field name="name">supplier.deadline.revision.form</field>
         <field name="model">supplier.evaluation.deadline.revision</field>
         <field name="arch" type="xml">
-            <form string="Revisió de termini" create="false" edit="false" delete="false" duplicate="false">
+            <form string="Deadline revision" create="false" edit="false" delete="false" duplicate="false">
                 <header>
-                    <button name="action_open_renegotiation_wizard" type="object" string="Confirmar renegociació" class="oe_highlight" groups="purchase.group_purchase_manager" invisible="revision_type != 'technical' or confirmation_ids"/>
+                    <button name="action_open_renegotiation_wizard" type="object" string="Confirm renegotiation" class="oe_highlight" groups="purchase.group_purchase_manager" invisible="revision_type != 'technical' or confirmation_ids"/>
                 </header>
                 <sheet>
                     <group>
                         <group>
-                            <field name="order_id" string="Comanda"/>
-                            <field name="purchase_line_id" string="Línia"/>
-                            <field name="supplier_id" string="Proveïdor"/>
-                            <field name="sequence" string="Revisió"/>
+                            <field name="order_id" string="Purchase order"/>
+                            <field name="purchase_line_id" string="Purchase line"/>
+                            <field name="supplier_id" string="Supplier"/>
+                            <field name="sequence" string="Revision"/>
                             <field name="company_id" groups="base.group_multi_company"/>
                         </group>
                         <group>
-                            <field name="previous_date" string="Previsió anterior"/>
-                            <field name="new_date" string="Nova previsió"/>
-                            <field name="revision_type" string="Tipus"/>
-                            <field name="change_source" string="Origen"/>
-                            <field name="change_direction" string="Direcció"/>
-                            <field name="changed_at" string="Moment del canvi"/>
-                            <field name="changed_by_id" string="Usuari"/>
+                            <field name="previous_date" string="Previous planned date"/>
+                            <field name="new_date" string="New planned date"/>
+                            <field name="revision_type" string="Type"/>
+                            <field name="change_source" string="Source"/>
+                            <field name="change_direction" string="Direction"/>
+                            <field name="changed_at" string="Change time"/>
+                            <field name="changed_by_id" string="User"/>
                         </group>
                     </group>
-                    <group><field name="line_description" string="Descripció de la línia"/></group>
-                    <separator string="Confirmacions registrades"/>
+                    <group><field name="line_description" string="Line description"/></group>
+                    <separator string="Recorded confirmations"/>
                     <field name="confirmation_ids" readonly="1" context="{'form_view_ref': 'supplier_evaluation.view_deadline_confirmation_form'}">
                         <list create="false" edit="false" delete="false" open_form_view="1">
-                            <field name="previous_agreed_date" string="Data anterior acceptada"/>
-                            <field name="new_agreed_date" string="Nova data acceptada"/>
-                            <field name="supplier_attributable" string="Atribuïble al proveïdor"/>
-                            <field name="confirmed_by_id" string="Confirmat per"/>
-                            <field name="confirmed_at" string="Moment"/>
-                            <field name="justification" string="Justificació"/>
+                            <field name="previous_agreed_date" string="Previous accepted date"/>
+                            <field name="new_agreed_date" string="New accepted date"/>
+                            <field name="supplier_attributable" string="Attributable to supplier"/>
+                            <field name="confirmed_by_id" string="Confirmed by"/>
+                            <field name="confirmed_at" string="Time"/>
+                            <field name="justification" string="Justification"/>
                         </list>
                     </field>
                 </sheet>
@@ -138,25 +138,25 @@
         <field name="name">supplier.deadline.revision.search</field>
         <field name="model">supplier.evaluation.deadline.revision</field>
         <field name="arch" type="xml">
-            <search string="Historial de terminis">
+            <search string="Deadline history">
                 <field name="order_id"/><field name="purchase_line_id"/><field name="supplier_id"/>
-                <filter name="technical" string="Canvis tècnics" domain="[('revision_type', '=', 'technical')]"/>
-                <filter name="confirmed" string="Amb confirmació" domain="[('confirmation_ids', '!=', False)]"/>
+                <filter name="technical" string="Technical changes" domain="[('revision_type', '=', 'technical')]"/>
+                <filter name="confirmed" string="With confirmation" domain="[('confirmation_ids', '!=', False)]"/>
                 <group>
-                    <filter name="group_order" string="Comanda" context="{'group_by': 'order_id'}"/>
-                    <filter name="group_line" string="Línia" context="{'group_by': 'purchase_line_id'}"/>
+                    <filter name="group_order" string="Purchase order" context="{'group_by': 'order_id'}"/>
+                    <filter name="group_line" string="Purchase line" context="{'group_by': 'purchase_line_id'}"/>
                 </group>
             </search>
         </field>
     </record>
     <record id="action_deadline_revisions" model="ir.actions.act_window">
-        <field name="name">Historial de terminis</field>
+        <field name="name">Deadline history</field>
         <field name="res_model">supplier.evaluation.deadline.revision</field>
         <field name="view_mode">list,form</field>
         <field name="view_id" ref="view_deadline_revision_list"/>
         <field name="search_view_id" ref="view_deadline_revision_search"/>
     </record>
-    <menuitem id="menu_supplier_deadlines" name="Terminis de proveïdors" parent="purchase.menu_purchase_root" sequence="60" groups="purchase.group_purchase_user"/>
-    <menuitem id="menu_supplier_deadline_revisions" name="Historial de terminis" parent="menu_supplier_deadlines" action="action_deadline_revisions" sequence="10" groups="purchase.group_purchase_user"/>
-    <menuitem id="menu_supplier_deadline_confirmations" name="Renegociacions confirmades" parent="menu_supplier_deadlines" action="action_deadline_confirmations" sequence="20" groups="purchase.group_purchase_user"/>
+    <menuitem id="menu_supplier_deadlines" name="Supplier deadlines" parent="purchase.menu_purchase_root" sequence="60" groups="purchase.group_purchase_user"/>
+    <menuitem id="menu_supplier_deadline_revisions" name="Deadline history" parent="menu_supplier_deadlines" action="action_deadline_revisions" sequence="10" groups="purchase.group_purchase_user"/>
+    <menuitem id="menu_supplier_deadline_confirmations" name="Confirmed renegotiations" parent="menu_supplier_deadlines" action="action_deadline_confirmations" sequence="20" groups="purchase.group_purchase_user"/>
 </odoo>

@@ -3,28 +3,28 @@
         <field name="name">supplier.deadline.renegotiation.wizard.form</field>
         <field name="model">supplier.evaluation.deadline.renegotiation.wizard</field>
         <field name="arch" type="xml">
-            <form string="Confirmar renegociació de termini">
+            <form string="Confirm deadline renegotiation">
                 <div class="alert alert-info" role="alert">
-                    Confirmar una renegociació no elimina el compromís original.
-                    L'historial i les avaluacions de recepcions completades es conserven.
+                    Confirming a renegotiation does not remove the original commitment.
+                    History and completed receipt evaluations are preserved.
                 </div>
                 <group>
                     <field name="revision_id" invisible="1"/>
                     <field name="company_id" invisible="1"/>
                     <field name="original_date_known" invisible="1"/>
-                    <field name="order_id" string="Comanda" options="{'no_open': True}"/>
-                    <field name="purchase_line_id" string="Línia" options="{'no_open': True}"/>
-                    <field name="original_date" string="Compromís original conservat" invisible="not original_date_known"/>
-                    <field name="previous_agreed_date" string="Data anterior acceptada"/>
-                    <field name="new_agreed_date" string="Nova data proposada"/>
+                    <field name="order_id" string="Purchase order" options="{'no_open': True}"/>
+                    <field name="purchase_line_id" string="Purchase line" options="{'no_open': True}"/>
+                    <field name="original_date" string="Preserved original commitment" invisible="not original_date_known"/>
+                    <field name="previous_agreed_date" string="Previous accepted date"/>
+                    <field name="new_agreed_date" string="New proposed date"/>
                 </group>
                 <group>
-                    <field name="justification" required="1" placeholder="Descriu l'acord i la referència de la comunicació amb el proveïdor"/>
+                    <field name="justification" required="1" placeholder="Describe the agreement and reference the supplier communication"/>
                     <field name="supplier_attributable" widget="radio" required="1"/>
                 </group>
                 <footer>
-                    <button name="action_confirm" type="object" string="Confirmar renegociació" class="btn-primary" groups="purchase.group_purchase_manager"/>
-                    <button string="Cancel·lar" special="cancel" class="btn-secondary"/>
+                    <button name="action_confirm" type="object" string="Confirm renegotiation" class="btn-primary" groups="purchase.group_purchase_manager"/>
+                    <button string="Cancel" special="cancel" class="btn-secondary"/>
                 </footer>
             </form>
         </field>

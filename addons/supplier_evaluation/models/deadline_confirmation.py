@@ -15,42 +15,50 @@ class SupplierDeadlineConfirmation(models.Model):
     revision_id = fields.Many2one(
         "supplier.evaluation.deadline.revision", required=True, readonly=True,
         ondelete="restrict", index=True, check_company=True, copy=False,
+        string="Deadline revision",
     )
     purchase_line_id = fields.Many2one(
         "purchase.order.line", required=True, readonly=True,
         ondelete="restrict", index=True, check_company=True, copy=False,
+        string="Purchase line",
     )
     order_id = fields.Many2one(
         "purchase.order", required=True, readonly=True,
         ondelete="restrict", check_company=True, copy=False,
+        string="Purchase order",
     )
     company_id = fields.Many2one(
         "res.company", required=True, readonly=True, ondelete="restrict", copy=False,
+        string="Company",
     )
     supplier_id = fields.Many2one(
         "res.partner", required=True, readonly=True, ondelete="restrict", copy=False,
+        string="Supplier",
     )
     previous_confirmation_id = fields.Many2one(
         "supplier.evaluation.deadline.confirmation", readonly=True,
         ondelete="restrict", check_company=True, copy=False,
+        string="Previous agreement",
     )
-    previous_agreed_date = fields.Datetime(required=True, readonly=True, copy=False)
-    new_agreed_date = fields.Datetime(required=True, readonly=True, copy=False)
+    previous_agreed_date = fields.Datetime(required=True, readonly=True, copy=False, string="Previous accepted date")
+    new_agreed_date = fields.Datetime(required=True, readonly=True, copy=False, string="New accepted date")
     confirmed_by_id = fields.Many2one(
         "res.users", required=True, readonly=True, ondelete="restrict", copy=False,
+        string="Confirmed by",
     )
-    confirmed_at = fields.Datetime(required=True, readonly=True, copy=False)
-    justification = fields.Text(required=True, readonly=True, copy=False)
-    supplier_attributable = fields.Boolean(readonly=True, copy=False)
+    confirmed_at = fields.Datetime(required=True, readonly=True, copy=False, string="Confirmation time")
+    justification = fields.Text(required=True, readonly=True, copy=False, string="Justification")
+    supplier_attributable = fields.Boolean(readonly=True, copy=False, string="Attributable to supplier")
     change_direction = fields.Selection(
-        [("postponed", "Termini posterior"), ("advanced", "Termini anterior")],
+        [("postponed", "Later deadline"), ("advanced", "Earlier deadline")],
         required=True, readonly=True, copy=False,
+        string="Direction",
     )
 
     _sql_constraints = [
-        ("revision_unique", "unique(revision_id)", "Aquesta revisió ja està confirmada."),
+        ("revision_unique", "unique(revision_id)", "This revision has already been confirmed."),
         ("different_dates", "check(previous_agreed_date <> new_agreed_date)",
-         "Una renegociació ha de canviar la data acceptada."),
+         "A renegotiation must change the accepted date."),
     ]
 
     @api.model_create_multi
@@ -58,43 +66,43 @@ class SupplierDeadlineConfirmation(models.Model):
         # Check the actual user's group even when called with sudo(). No
         # context flag or direct create() bypasses manager authorisation.
         if not self.env.user.has_group("purchase.group_purchase_manager"):
-            raise AccessError(_("Només els responsables de compres poden confirmar renegociacions."))
+            raise AccessError(_("Only Purchase managers can confirm renegotiations."))
         self.check_access("create")
         if any(
             f"default_{name}" in self.env.context
             for name in set(self._fields) - _INPUT_FIELDS
         ):
-            raise AccessError(_("Les dades històriques de la confirmació les fixa el servidor."))
+            raise AccessError(_("The server sets the historical confirmation data."))
 
         revision_ids = []
         inputs = []
         for vals in vals_list:
             if set(vals) - _INPUT_FIELDS:
-                raise AccessError(_("Les dades històriques de la confirmació les fixa el servidor."))
+                raise AccessError(_("The server sets the historical confirmation data."))
             revision_id = vals.get("revision_id")
             if type(revision_id) is not int or revision_id <= 0:
-                raise ValidationError(_("Cal seleccionar una revisió desada."))
+                raise ValidationError(_("Select a saved revision."))
             reason = vals.get("justification")
             if not isinstance(reason, str) or not reason.strip():
-                raise ValidationError(_("Cal justificar l'acord de renegociació."))
+                raise ValidationError(_("Provide a justification for the renegotiation agreement."))
             if type(vals.get("supplier_attributable")) is not bool:
-                raise ValidationError(_("Cal indicar explícitament si el canvi és atribuïble al proveïdor."))
+                raise ValidationError(_("Explicitly indicate whether the change is attributable to the supplier."))
             revision_ids.append(revision_id)
             inputs.append((revision_id, reason.strip(), vals["supplier_attributable"]))
         if len(set(revision_ids)) != len(revision_ids):
-            raise ValidationError(_("No es pot confirmar dues vegades la mateixa revisió."))
+            raise ValidationError(_("The same revision cannot be confirmed twice."))
         if not revision_ids:
             return super().create([])
 
         Revision = self.env["supplier.evaluation.deadline.revision"]
         revisions = Revision.browse(revision_ids).exists()
         if len(revisions) != len(revision_ids):
-            raise ValidationError(_("La revisió seleccionada no existeix."))
+            raise ValidationError(_("The selected revision does not exist."))
         revisions.check_access("read")
         for revision in revisions:
             company = revision.company_id
             if company not in self.env.user.company_ids or company not in self.env.companies:
-                raise AccessError(_("No podeu confirmar acords d'aquesta empresa."))
+                raise AccessError(_("You cannot confirm agreements for this company."))
         lines = revisions.purchase_line_id
         lines.check_access("write")
         # Flush pending computations and serialize with date edits/receipts.
@@ -117,15 +125,15 @@ class SupplierDeadlineConfirmation(models.Model):
     def _get_confirmation_preview(self, revision):
         """Validate a preview without creating a confirmation or changing history."""
         if not self.env.user.has_group("purchase.group_purchase_manager"):
-            raise AccessError(_("Només els responsables de compres poden confirmar renegociacions."))
+            raise AccessError(_("Only Purchase managers can confirm renegotiations."))
         self.check_access("create")
         revision.ensure_one()
         if not revision.exists():
-            raise ValidationError(_("La revisió seleccionada no existeix."))
+            raise ValidationError(_("The selected revision does not exist."))
         revision.check_access("read")
         company = revision.company_id
         if company not in self.env.user.company_ids or company not in self.env.companies:
-            raise AccessError(_("No podeu confirmar acords d'aquesta empresa."))
+            raise AccessError(_("You cannot confirm agreements for this company."))
         revision.purchase_line_id.check_access("write")
         revision.purchase_line_id._supplier_lock_deadlines()
         return self._prepare_confirmation_values(revision)
@@ -136,9 +144,9 @@ class SupplierDeadlineConfirmation(models.Model):
         Revision = self.env["supplier.evaluation.deadline.revision"]
         line = revision.purchase_line_id
         if self.sudo().search_count([("revision_id", "=", revision.id)]):
-            raise ValidationError(_("Aquesta revisió ja està confirmada."))
+            raise ValidationError(_("This revision has already been confirmed."))
         if line.order_id.state not in ("purchase", "done") or line.display_type:
-            raise ValidationError(_("Només es poden confirmar acords de línies de compra aprovades."))
+            raise ValidationError(_("Agreements can only be confirmed for approved purchase lines."))
         if (
             revision.revision_type != "technical"
             or revision.change_source != "unverified"
@@ -146,16 +154,16 @@ class SupplierDeadlineConfirmation(models.Model):
             or revision.previous_date == revision.new_date
             or revision.change_direction not in ("postponed", "advanced")
         ):
-            raise ValidationError(_("La revisió no representa un canvi de termini confirmable."))
+            raise ValidationError(_("This revision does not represent a deadline change eligible for confirmation."))
         latest = Revision.search([("purchase_line_id", "=", line.id)], limit=1)
         if latest != revision or line.date_planned != revision.new_date:
-            raise ValidationError(_("El termini ha canviat; cal revisar l'última revisió vigent."))
+            raise ValidationError(_("The deadline has changed; review the latest current revision."))
         if (
             revision.order_id != line.order_id
             or revision.company_id != line.company_id
             or revision.supplier_id != line.order_id.partner_id
         ):
-            raise ValidationError(_("La revisió ja no correspon a la comanda i al proveïdor actuals."))
+            raise ValidationError(_("The revision no longer matches the current order and supplier."))
 
         previous = self.sudo().search([("purchase_line_id", "=", line.id)], limit=1)
         if previous:
@@ -166,16 +174,16 @@ class SupplierDeadlineConfirmation(models.Model):
             ], order="sequence, id", limit=1)
             accepted_supplier = baseline.supplier_id
         if accepted_supplier != revision.supplier_id:
-            raise ValidationError(_("No consta cap acord anterior acreditat per a aquest proveïdor."))
+            raise ValidationError(_("No verified previous agreement is recorded for this supplier."))
         previous_date = previous.new_agreed_date if previous else (
             line.supplier_original_date if line.supplier_original_date_known else False
         )
         if not previous_date:
-            raise ValidationError(_("No es coneix cap data acceptada anterior; no es pot inventar un acord històric."))
+            raise ValidationError(_("No previous accepted date is known; a historical agreement cannot be invented."))
         if previous and previous.revision_id.sequence >= revision.sequence:
-            raise ValidationError(_("La revisió és anterior a l'últim acord confirmat."))
+            raise ValidationError(_("The revision predates the latest confirmed agreement."))
         if previous_date == revision.new_date:
-            raise ValidationError(_("La nova data coincideix amb l'última data acceptada."))
+            raise ValidationError(_("The new date matches the latest accepted date."))
         return {
             "revision_id": revision.id,
             "purchase_line_id": line.id, "order_id": line.order_id.id,
@@ -186,11 +194,11 @@ class SupplierDeadlineConfirmation(models.Model):
         }
 
     def write(self, vals):
-        raise AccessError(_("Les confirmacions de renegociació són immutables."))
+        raise AccessError(_("Renegotiation confirmations are immutable."))
 
     @api.ondelete(at_uninstall=False)
     def _unlink_except_uninstall(self):
-        raise UserError(_("No es poden eliminar les confirmacions de renegociació."))
+        raise UserError(_("Renegotiation confirmations cannot be deleted."))
 
     def copy(self, default=None):
-        raise UserError(_("Les confirmacions de renegociació no es poden duplicar."))
+        raise UserError(_("Renegotiation confirmations cannot be duplicated."))

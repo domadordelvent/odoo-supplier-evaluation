@@ -1,3 +1,7 @@
+> La interfície utilitza ara textos originals en anglès i traduccions estàndard
+> en català (`i18n/ca.po`). Les rutes catalanes d’aquest document es conserven
+> com a referència; vegeu [idiomes i validació](../../docs/I18N.md).
+
 # Documentació tècnica del mòdul
 
 Project overview and installation in English: [main README](../../README.md).

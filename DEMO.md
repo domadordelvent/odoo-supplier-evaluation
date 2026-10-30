@@ -71,8 +71,8 @@ docker compose --env-file .env.demo -f compose.demo.yml ps
 ## Access
 
 Open <http://127.0.0.1:8074/web/login?db=supplier_evaluation_demo> using the
-credentials you configured. Navigate to **Purchase → Avaluació de proveïdors**,
-open a supplier and select **Avaluació OTD**.
+credentials you configured. Navigate to **Purchase → Supplier evaluation**,
+open a supplier and select **OTD evaluation**.
 
 The service is local, not a hosted public demo. The database manager is hidden
 and the database filter selects only `supplier_evaluation_demo`.

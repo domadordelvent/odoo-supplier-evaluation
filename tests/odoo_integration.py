@@ -15,6 +15,8 @@ from odoo.addons.supplier_evaluation.tests.test_line_otd import TestLineOTD
 from odoo.addons.supplier_evaluation.tests.test_supplier_otd import TestSupplierOTD
 from odoo.addons.supplier_evaluation.tests.test_supplier_otd_ui import TestSupplierOTDUI
 
+from odoo.addons.supplier_evaluation.tests.test_i18n import TestSupplierI18n
+
 try:
     suite = unittest.TestSuite([
         unittest.defaultTestLoader.loadTestsFromTestCase(TestDeadlineHistory),
@@ -23,6 +25,7 @@ try:
         unittest.defaultTestLoader.loadTestsFromTestCase(TestLineOTD),
         unittest.defaultTestLoader.loadTestsFromTestCase(TestSupplierOTD),
         unittest.defaultTestLoader.loadTestsFromTestCase(TestSupplierOTDUI),
+        unittest.defaultTestLoader.loadTestsFromTestCase(TestSupplierI18n),
     ])
     result = unittest.TextTestRunner(verbosity=2, failfast=True).run(suite)
     if not result.wasSuccessful():

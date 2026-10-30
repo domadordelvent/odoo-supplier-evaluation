@@ -12,61 +12,64 @@ class SupplierDeadlineRevision(models.Model):
     purchase_line_id = fields.Many2one(
         "purchase.order.line", required=True, readonly=True,
         ondelete="restrict", index=True, check_company=True,
+        string="Purchase line",
     )
     order_id = fields.Many2one(
         "purchase.order", required=True, readonly=True,
         ondelete="restrict", check_company=True,
+        string="Purchase order",
     )
-    company_id = fields.Many2one("res.company", required=True, readonly=True, ondelete="restrict")
-    supplier_id = fields.Many2one("res.partner", required=True, readonly=True, ondelete="restrict")
-    sequence = fields.Integer(required=True, readonly=True)
-    previous_date = fields.Datetime(readonly=True)
-    new_date = fields.Datetime(readonly=True)
-    changed_at = fields.Datetime(required=True, readonly=True)
-    changed_by_id = fields.Many2one("res.users", required=True, readonly=True, ondelete="restrict")
+    company_id = fields.Many2one("res.company", required=True, readonly=True, ondelete="restrict", string="Company")
+    supplier_id = fields.Many2one("res.partner", required=True, readonly=True, ondelete="restrict", string="Supplier")
+    sequence = fields.Integer(required=True, readonly=True, string="Revision number")
+    previous_date = fields.Datetime(readonly=True, string="Previous planned date")
+    new_date = fields.Datetime(readonly=True, string="New planned date")
+    changed_at = fields.Datetime(required=True, readonly=True, string="Change time")
+    changed_by_id = fields.Many2one("res.users", required=True, readonly=True, ondelete="restrict", string="Changed by")
     revision_type = fields.Selection([
-        ("initial", "Compromís inicial"), ("postponement", "Ajornament"),
-        ("advance", "Avançament"), ("unknown_initial", "Inicialització sense historial"),
-        ("date_set", "Data informada"), ("date_removed", "Data retirada"),
-        ("technical", "Canvi tècnic, sense renegociació acreditada"),
-    ], required=True, readonly=True)
+        ("initial", "Original commitment"), ("postponement", "Postponement"),
+        ("advance", "Advance"), ("unknown_initial", "Initialization without history"),
+        ("date_set", "Date set"), ("date_removed", "Date removed"),
+        ("technical", "Technical change without a verified renegotiation"),
+    ], required=True, readonly=True, string="Revision type")
     change_source = fields.Selection([
-        ("baseline", "Inicialització del seguiment"),
-        ("unverified", "Persistència ORM; origen no verificat"),
-    ], required=True, readonly=True)
+        ("baseline", "Tracking initialization"),
+        ("unverified", "ORM persistence; unverified origin"),
+    ], required=True, readonly=True, string="Change source")
     change_direction = fields.Selection([
-        ("set", "Data informada"), ("removed", "Data retirada"),
-        ("postponed", "Termini posterior"), ("advanced", "Termini anterior"),
-        ("unchanged", "Sense canvi"),
-    ], required=True, readonly=True)
-    order_reference = fields.Char(required=True, readonly=True)
-    line_description = fields.Text(readonly=True)
-    supplier_name = fields.Char(readonly=True)
+        ("set", "Date set"), ("removed", "Date removed"),
+        ("postponed", "Later deadline"), ("advanced", "Earlier deadline"),
+        ("unchanged", "Unchanged"),
+    ], required=True, readonly=True, string="Direction")
+    order_reference = fields.Char(required=True, readonly=True, string="Order reference")
+    line_description = fields.Text(readonly=True, string="Line description")
+    supplier_name = fields.Char(readonly=True, string="Supplier name")
     confirmation_ids = fields.One2many(
         "supplier.evaluation.deadline.confirmation", "revision_id",
         readonly=True, copy=False,
+        string="Recorded confirmations",
     )
 
     _sql_constraints = [
         ("line_sequence_unique", "unique(purchase_line_id, sequence)",
-         "La revisió ha de ser única per línia de compra."),
-        ("positive_sequence", "check(sequence > 0)", "La revisió ha de ser positiva."),
+         "The revision must be unique per purchase line."),
+        ("positive_sequence", "check(sequence > 0)", "The revision must be positive."),
     ]
 
     @api.model_create_multi
     def create(self, vals_list):
-        raise AccessError(_("Les revisions només es poden crear des del seguiment de terminis."))
+        raise AccessError(_("Revisions can only be created by deadline tracking."))
 
     def write(self, vals):
-        raise AccessError(_("Les revisions de termini són immutables."))
+        raise AccessError(_("Deadline revisions are immutable."))
 
     @api.ondelete(at_uninstall=False)
     def _unlink_except_uninstall(self):
-        raise UserError(_("No es pot eliminar l'historial de terminis."))
+        raise UserError(_("Deadline history cannot be deleted."))
 
     def action_open_renegotiation_wizard(self):
         if not self.env.user.has_group("purchase.group_purchase_manager"):
-            raise AccessError(_("Només els responsables de compres poden confirmar renegociacions."))
+            raise AccessError(_("Only Purchase managers can confirm renegotiations."))
         self.ensure_one()
         self.env["supplier.evaluation.deadline.confirmation"]._get_confirmation_preview(self)
         # Parent purchase views may carry defaults for other models. They must
@@ -77,7 +80,7 @@ class SupplierDeadlineRevision(models.Model):
         })
         return {
             "type": "ir.actions.act_window",
-            "name": _("Confirmar renegociació de termini"),
+            "name": _("Confirm deadline renegotiation"),
             "res_model": wizard._name,
             "res_id": wizard.id,
             "view_mode": "form",
@@ -89,7 +92,7 @@ class SupplierDeadlineRevision(models.Model):
     def action_confirm_renegotiation(self, justification, supplier_attributable):
         """Explicit manager action; never called by automatic date tracking."""
         if not self.env.user.has_group("purchase.group_purchase_manager"):
-            raise AccessError(_("Només els responsables de compres poden confirmar renegociacions."))
+            raise AccessError(_("Only Purchase managers can confirm renegotiations."))
         self.ensure_one()
         self.check_access("read")
         confirmation = self.env["supplier.evaluation.deadline.confirmation"].create({
@@ -99,7 +102,7 @@ class SupplierDeadlineRevision(models.Model):
         })
         return {
             "type": "ir.actions.act_window",
-            "name": _("Renegociació confirmada"),
+            "name": _("Confirmed renegotiation"),
             "res_model": confirmation._name,
             "res_id": confirmation.id,
             "view_mode": "form",

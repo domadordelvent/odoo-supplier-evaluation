@@ -4,3 +4,4 @@ from . import test_deadline_wizard
 from . import test_line_otd
 from . import test_supplier_otd
 from . import test_supplier_otd_ui
+from . import test_i18n

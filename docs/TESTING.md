@@ -13,7 +13,7 @@ From the repository root:
 PYTHONDONTWRITEBYTECODE=1 python3 -m unittest discover -s tests -p 'test_*.py' -v
 ```
 
-Current result: **44 passed**. These tests exercise pure helper logic,
+Current result: **47 passed**. These tests exercise pure helper logic,
 source-level invariants, demo-plan chronology and database/version guards;
 they are not a substitute for real ORM tests.
 
@@ -33,7 +33,7 @@ The test configuration must connect only to the test PostgreSQL instance.
 Do not use `-i` on an existing business database. To rerun on an isolated
 installed copy, use `-u supplier_evaluation` in place of `-i`.
 
-The final Odoo result must report **0 failed, 0 errors out of 135 tests**;
+The final Odoo result must report **0 failed, 0 errors out of 138 tests**;
 check the result line and exit status. Permission-denial messages and SQL
 constraint violations intentionally exercised by negative tests are expected
 inside those test cases. The per-module statistics may include setup methods
@@ -66,7 +66,10 @@ Set `OTD_UI_PASSWORD` privately in your shell. Then:
 
 The script verifies the ten fixed demo suppliers, sorting, the below-50%
 filter, enlarged progress bars, isolation from standard forms, Supplier 05's
-20/10/10 counters and five drilldown columns. It briefly creates and removes
+20/10/10 counters, five drilldown columns and renegotiation wizard.
+Use `--language en_US` (default) or `--language ca_ES`; the script changes only
+the temporary user’s language preference and creates an incomplete test order
+to open the wizard without confirming an agreement. It briefly creates and removes
 one no-data supplier **only in the temporary copy**. Its output includes
 screenshots and a JSON summary. It never runs the generator.
 

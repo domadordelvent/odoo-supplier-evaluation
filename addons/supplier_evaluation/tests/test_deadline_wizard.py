@@ -189,8 +189,8 @@ class TestDeadlineWizard(DeadlineConfirmationCase):
             "supplier_evaluation.view_deadline_renegotiation_wizard_form", self.manager,
         )
         text = " ".join("".join(arch.itertext()).split())
-        self.assertIn("no elimina el compromís original", text)
-        self.assertIn("recepcions completades es conserven", text)
+        self.assertIn("does not remove the original commitment", text)
+        self.assertIn("completed receipt evaluations are preserved", text)
         self.assertTrue(arch.xpath(".//field[@name='justification'][@required='1']"))
         self.assertTrue(arch.xpath(".//field[@name='supplier_attributable'][@required='1']"))
         self.assertTrue(arch.xpath(".//button[@special='cancel']"))

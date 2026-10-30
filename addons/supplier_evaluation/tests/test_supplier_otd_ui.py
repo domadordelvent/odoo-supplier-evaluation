@@ -57,7 +57,7 @@ class TestSupplierOTDUI(DeadlineConfirmationCase):
         zero = self.provider('UI Zero', [True]).with_user(self.buyer)
         empty = self.provider('UI Empty', []).with_user(self.buyer)
         self.assertEqual(zero.supplier_otd_display, '0.00 %')
-        self.assertEqual(empty.supplier_otd_display, 'Sense dades')
+        self.assertEqual(empty.supplier_otd_display, 'No data')
 
     def test_field_sortability_available_to_native_view_metadata(self):
         for field in ('supplier_otd_percentage', 'supplier_otd_display'):

@@ -13,25 +13,26 @@ class SupplierDeadlineRenegotiationWizard(models.TransientModel):
     revision_id = fields.Many2one(
         "supplier.evaluation.deadline.revision", required=True, readonly=True,
         ondelete="cascade", check_company=True,
+        string="Deadline revision",
     )
-    company_id = fields.Many2one(related="revision_id.company_id", store=True, readonly=True)
-    order_id = fields.Many2one(related="revision_id.order_id", readonly=True)
-    purchase_line_id = fields.Many2one(related="revision_id.purchase_line_id", readonly=True)
-    previous_agreed_date = fields.Datetime(compute="_compute_dates", compute_sudo=False)
-    new_agreed_date = fields.Datetime(compute="_compute_dates", compute_sudo=False)
-    original_date = fields.Datetime(compute="_compute_dates", compute_sudo=False)
-    original_date_known = fields.Boolean(compute="_compute_dates", compute_sudo=False)
-    justification = fields.Text(string="Justificació de l'acord")
+    company_id = fields.Many2one(related="revision_id.company_id", store=True, readonly=True, string="Company")
+    order_id = fields.Many2one(related="revision_id.order_id", readonly=True, string="Purchase order")
+    purchase_line_id = fields.Many2one(related="revision_id.purchase_line_id", readonly=True, string="Purchase line")
+    previous_agreed_date = fields.Datetime(compute="_compute_dates", compute_sudo=False, string="Previous accepted date")
+    new_agreed_date = fields.Datetime(compute="_compute_dates", compute_sudo=False, string="New accepted date")
+    original_date = fields.Datetime(compute="_compute_dates", compute_sudo=False, string="Original commitment")
+    original_date_known = fields.Boolean(compute="_compute_dates", compute_sudo=False, string="Original commitment known")
+    justification = fields.Text(string="Agreement justification")
     # No default: require a deliberate yes/no choice instead of silently
     # treating an untouched checkbox as an explicit attribution decision.
     supplier_attributable = fields.Selection(
-        [("yes", "Sí, atribuïble al proveïdor"), ("no", "No, no atribuïble al proveïdor")],
-        string="Atribució del canvi",
+        [("yes", "Yes, attributable to the supplier"), ("no", "No, not attributable to the supplier")],
+        string="Change attribution",
     )
 
     def _check_manager(self):
         if not self.env.user.has_group("purchase.group_purchase_manager"):
-            raise AccessError(_("Només els responsables de compres poden confirmar renegociacions."))
+            raise AccessError(_("Only Purchase managers can confirm renegotiations."))
 
     @api.depends("revision_id")
     def _compute_dates(self):
@@ -55,15 +56,15 @@ class SupplierDeadlineRenegotiationWizard(models.TransientModel):
         if any(set(vals) - _WIZARD_INPUTS for vals in vals_list) or any(
             f"default_{name}" in self.env.context for name in set(self._fields) - _WIZARD_INPUTS
         ):
-            raise AccessError(_("Les dates i les relacions de l'assistent les fixa el servidor."))
+            raise AccessError(_("The server sets the wizard dates and relationships."))
         return super().create(vals_list)
 
     def write(self, vals):
         self._check_manager()
         if set(vals) - _WIZARD_INPUTS:
-            raise AccessError(_("Les dates i les relacions de l'assistent les fixa el servidor."))
+            raise AccessError(_("The server sets the wizard dates and relationships."))
         if "revision_id" in vals and any(wizard.revision_id.id != vals["revision_id"] for wizard in self):
-            raise UserError(_("Cal obrir un altre assistent per canviar la revisió seleccionada."))
+            raise UserError(_("Open a new wizard to change the selected revision."))
         return super().write(vals)
 
     def action_confirm(self):
@@ -71,7 +72,7 @@ class SupplierDeadlineRenegotiationWizard(models.TransientModel):
         self.ensure_one()
         self.check_access("write")
         if self.supplier_attributable not in ("yes", "no"):
-            raise ValidationError(_("Cal indicar explícitament si el canvi és atribuïble al proveïdor."))
+            raise ValidationError(_("Explicitly indicate whether the change is attributable to the supplier."))
         context = {key: value for key, value in self.env.context.items() if not key.startswith("default_")}
         # This action invokes the unchanged persistent model create path:
         # current agreement, company, permission and duplicate checks run again.

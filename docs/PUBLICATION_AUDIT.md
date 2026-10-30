@@ -1,3 +1,7 @@
+> Historical publication audit before bilingual interface preparation.
+> See [I18N validation](I18N.md) for the current 138 integration / 47 local tests
+> and English/Catalan interface status.
+
 # Publication audit — 2026-10-30
 
 Release: **18.0.1.3.0**, matching `addons/supplier_evaluation/__manifest__.py`.

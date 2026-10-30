@@ -1,8 +1,8 @@
 {
     "name": "Supplier Evaluation",
     "version": "18.0.1.3.0",
-    "summary": "OTD per línia completada i historial de terminis dels proveïdors",
-    "description": "OTD immutable per línia completada segons l'últim acord confirmat o el compromís original, amb tolerància de 24 hores. Conserva les captures històriques de recepcions.",
+    "summary": "Completed-line OTD and supplier deadline history",
+    "description": "Immutable completed-line OTD based on the latest confirmed agreement or original commitment, with a 24-hour tolerance. Preserves historical receipt snapshots.",
     "category": "Inventory/Inventory",
     "license": "LGPL-3",
     "depends": ["base", "purchase", "stock", "purchase_stock"],

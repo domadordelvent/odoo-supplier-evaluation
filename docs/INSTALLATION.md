@@ -34,7 +34,7 @@ managers can confirm deadline renegotiations. Inventory users have read
 access to history, but do not gain access to supplier aggregates just by
 having Inventory permissions. See [security](../SECURITY.md).
 
-Open **Purchase → Avaluació de proveïdors**. A newly installed database, or
+Open **Purchase → Supplier evaluation**. A newly installed database, or
 legacy completed lines without captured observations, can correctly show
 `Sense dades`. Installing does not backfill or generate business data.
 

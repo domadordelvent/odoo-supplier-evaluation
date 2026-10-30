@@ -8,14 +8,14 @@
                 <field name="supplier_otd_status" optional="hide"/>
                 <field name="supplier_otd_deadline" optional="hide"/>
                 <field name="supplier_otd_completed_at" optional="hide"/>
-                <button name="action_open_supplier_deadline_history" type="object" icon="fa-calendar" title="Historial de terminis" groups="purchase.group_purchase_user" invisible="not id or display_type"/>
+                <button name="action_open_supplier_deadline_history" type="object" icon="fa-calendar" title="Deadline history" groups="purchase.group_purchase_user" invisible="not id or display_type"/>
             </xpath>
             <xpath expr="//field[@name='order_line']/form//field[@name='date_planned']" position="after">
                 <field name="supplier_otd_status"/>
                 <field name="supplier_otd_deadline"/>
                 <field name="supplier_otd_completed_at"/>
                 <field name="supplier_otd_confirmation_id"/>
-                <button name="action_open_supplier_deadline_history" type="object" string="Historial de terminis" icon="fa-calendar" groups="purchase.group_purchase_user" invisible="not id or display_type"/>
+                <button name="action_open_supplier_deadline_history" type="object" string="Deadline history" icon="fa-calendar" groups="purchase.group_purchase_user" invisible="not id or display_type"/>
             </xpath>
         </field>
     </record>

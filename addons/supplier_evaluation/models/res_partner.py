@@ -14,26 +14,28 @@ class ResPartner(models.Model):
     supplier_otd_line_ids = fields.One2many(
         "purchase.order.line", "supplier_otd_supplier_id", readonly=True, copy=False,
         groups=_PURCHASE_GROUP,
+        string="Captured OTD lines",
     )
     supplier_otd_has_data = fields.Boolean(
         compute="_compute_supplier_otd_summary", compute_sudo=False, groups=_PURCHASE_GROUP,
         search="_search_supplier_otd_has_data",
+        string="Has evaluated lines",
     )
     supplier_otd_percentage = fields.Float(
-        string="Percentatge OTD", digits=(5, 2), search="_search_supplier_otd_percentage",
+        string="OTD percentage", digits=(5, 2), search="_search_supplier_otd_percentage",
         compute="_compute_supplier_otd_summary", compute_sudo=False, groups=_PURCHASE_GROUP,
-        help="Línies puntuals / línies avaluades × 100. Cada línia compta una vegada, sense ponderació per quantitat o preu.",
+        help="On-time lines / evaluated lines × 100. Each line counts once, regardless of quantity or price.",
     )
     supplier_otd_evaluated_count = fields.Integer(
-        string="Línies avaluades", compute="_compute_supplier_otd_summary",
+        string="Evaluated lines", compute="_compute_supplier_otd_summary",
         compute_sudo=False, groups=_PURCHASE_GROUP,
     )
     supplier_otd_on_time_count = fields.Integer(
-        string="Línies puntuals", compute="_compute_supplier_otd_summary",
+        string="On-time lines", compute="_compute_supplier_otd_summary",
         compute_sudo=False, groups=_PURCHASE_GROUP,
     )
     supplier_otd_late_count = fields.Integer(
-        string="Línies tardanes", compute="_compute_supplier_otd_summary",
+        string="Late lines", compute="_compute_supplier_otd_summary",
         compute_sudo=False, groups=_PURCHASE_GROUP,
     )
 
@@ -48,14 +50,14 @@ class ResPartner(models.Model):
         for partner in self:
             partner.supplier_otd_display = (
                 formatLang(self.env, partner.supplier_otd_percentage, digits=2) + " %"
-                if partner.supplier_otd_has_data else _("Sense dades")
+                if partner.supplier_otd_has_data else _("No data")
             )
 
     @api.model
     def _supplier_otd_source(self, partner_ids=None):
         """One shared eligibility/security scope for counters, order, search and drilldown."""
         if not self.env.user.has_group(_PURCHASE_GROUP):
-            raise AccessError(_("Només els usuaris de compres poden consultar l'OTD agregat."))
+            raise AccessError(_("Only Purchase users can view aggregated OTD."))
         companies = self.env.companies & self.env.user.company_ids
         lines = self.env["purchase.order.line"].sudo(False).with_context(allowed_company_ids=companies.ids)
         domain = [
@@ -107,7 +109,7 @@ class ResPartner(models.Model):
     def _search_supplier_otd_percentage(self, operator, value):
         # No-data rows have no percentage and never match numeric filters.
         if operator not in ("=", "!=", "<", "<=", ">", ">=") or type(value) not in (int, float) or not math.isfinite(value):
-            raise ValueError("Use a finite numeric OTD comparison.")
+            raise ValueError(_("Use a finite numeric OTD comparison."))
         rows = self.env.execute_query(SQL(
             "SELECT partner_id FROM (%s) AS totals WHERE percentage %s %s",
             self._supplier_otd_totals_sql(), SQL(operator), value,
@@ -117,7 +119,7 @@ class ResPartner(models.Model):
     @api.model
     def _search_supplier_otd_has_data(self, operator, value):
         if operator not in ("=", "!=") or type(value) is not bool:
-            raise ValueError("Use a boolean data-availability comparison.")
+            raise ValueError(_("Use a boolean data-availability comparison."))
         rows = self.env.execute_query(self._supplier_otd_totals_sql())
         positive = value if operator == "=" else not value
         return [("id", "in" if positive else "not in", [row[0] for row in rows])]

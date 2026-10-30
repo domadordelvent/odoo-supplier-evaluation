@@ -22,8 +22,9 @@ Each evaluated line has the same weight, regardless of quantity or price.
   Odoo's different, standard **On-time Rate** is hidden only in this action's
   supplier form.
 
-Open **Purchase → Avaluació de proveïdors**, then a supplier's
-**Avaluació OTD** tab. Labels are currently primarily Catalan.
+Open **Purchase → Supplier evaluation**, then a supplier's
+**OTD evaluation** tab. English is the source language; Catalan is provided
+through Odoo's standard translation system. See [language setup](docs/I18N.md).
 
 ## Screenshots
 
@@ -109,8 +110,8 @@ and [access control and security](SECURITY.md).
 
 ## Validation
 
-- **135 integration tests** passed on an isolated copy for the final UI.
-- **44 local tests** cover deadline persistence, classification, demo plans
+- **138 integration tests** passed on an isolated copy for the final UI.
+- **47 local tests** cover deadline persistence, classification, demo plans
   and safety/version guards without a database.
 - Chromium verified all ten fictional suppliers (10%–100%), native sorting,
   filtering, dashboard rendering, standard-form isolation and drilldown.
@@ -126,8 +127,7 @@ excluded from Git.
 
 - Targets Odoo 18 Community; other major versions and Enterprise are not
   certified. Validation covers the specific build recorded in the audit.
-- Most interface labels are Catalan; a full English translation is not
-  included yet.
+- English and Catalan are supplied; other module translations are not included.
 - No historical backfill or retrospective rewriting of completed outcomes.
 - No quantity/value weighting, financial scoring or automatic parent-company
   supplier consolidation. Odoo's standard On-time Rate uses another formula.

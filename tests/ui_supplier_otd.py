@@ -1,7 +1,8 @@
-"""Optional Playwright checks against the ten demo vendors in a temporary DB.
+"""Optional bilingual Playwright checks against a temporary demo copy.
 
-Only a new no-data partner is created and removed in finally. No browser
-libraries or assets are installed into the Odoo addon.
+Switches the test user's language, creates/removes a no-data supplier and
+leaves one incomplete purchase-order fixture to exercise the wizard.
+No browser libraries or assets are installed into the Odoo addon.
 """
 import argparse
 import json
@@ -19,6 +20,7 @@ def main():
     parser.add_argument('--login', default='demo_admin')
     parser.add_argument('--output-dir', required=True)
     parser.add_argument('--browser-executable')
+    parser.add_argument('--language', choices=['en_US', 'ca_ES'], default='en_US')
     args = parser.parse_args()
     if not args.database.startswith('supplier_evaluation_otd_'):
         parser.error('Use a temporary supplier_evaluation_otd_* DB; permanent bases are forbidden.')
@@ -28,13 +30,19 @@ def main():
     output = Path(args.output_dir)
     output.mkdir(parents=True, exist_ok=True)
     base = args.base_url.rstrip('/')
+    labels = {
+        'en_US': {'tab': 'OTD evaluation', 'menu': 'Supplier evaluation', 'filter': 'OTD below 50%', 'on_time': 'On time', 'late': 'Late', 'no_data': 'No data', 'wizard': 'Confirm deadline renegotiation', 'confirm': 'Confirm renegotiation', 'warning': 'does not remove the original commitment', 'decimal': '.', 'cancel': 'Cancel'},
+        'ca_ES': {'tab': 'Avaluació OTD', 'menu': 'Avaluació de proveïdors', 'filter': 'OTD inferior al 50 %', 'on_time': 'Puntual', 'late': 'Amb retard', 'no_data': 'Sense dades', 'wizard': 'Confirmar renegociació de termini', 'confirm': 'Confirmar renegociació', 'warning': 'no elimina el compromís original', 'decimal': ',', 'cancel': 'Cancel·lar'},
+    }[args.language]
+    def percent(value):
+        return str(value) + labels['decimal'] + '00 %'
     launch_options = {'headless': True, 'args': ['--no-sandbox']}
     if args.browser_executable:
         launch_options['executable_path'] = args.browser_executable
 
     with sync_playwright() as playwright:
         browser = playwright.chromium.launch(**launch_options)
-        context = browser.new_context(viewport={'width': 1440, 'height': 1000}, locale='en-US')
+        context = browser.new_context(viewport={'width': 1440, 'height': 1000}, locale=args.language.replace('_', '-'))
         page = context.new_page()
         errors = []
         page.on('pageerror', lambda error: errors.append(str(error)))
@@ -58,6 +66,14 @@ def main():
                 raise RuntimeError(response['error'].get('data', {}).get('message', 'RPC failed'))
             return response['result']
 
+        rpc('res.users', 'write', [[authenticated['result']['uid']], {'lang': args.language}])
+        # Refresh the session context after switching the temporary test user.
+        authenticated = context.request.post(base + '/web/session/authenticate', data={
+            'jsonrpc': '2.0', 'method': 'call', 'id': 0,
+            'params': {'db': args.database, 'login': args.login, 'password': password},
+        }).json()
+        assert authenticated['result']['db'] == args.database
+
         def settle_form(response):
             response.json()
             # Long polling prevents networkidle; wait for the form's RPC and
@@ -65,7 +81,7 @@ def main():
             page.evaluate('async () => {await new Promise(requestAnimationFrame); await new Promise(requestAnimationFrame);}')
 
         def open_otd_tab():
-            tab = page.get_by_role('tab', name='Avaluació OTD', exact=True)
+            tab = page.get_by_role('tab', name=labels['tab'], exact=True)
             tab.click(timeout=30000)
             expect(tab).to_have_class(re.compile(r'.*\bactive\b.*'))
             expect(page.locator('.o_notebook_content > .tab-pane.active')).to_have_css('opacity', '1')
@@ -80,13 +96,13 @@ def main():
         page.goto(overview, wait_until='domcontentloaded')
         rows = page.locator('.o_list_view tbody tr.o_data_row')
         expect(rows).to_have_count(10, timeout=60000)
-        expect(rows.first.locator('td[name="supplier_otd_display"]')).to_have_text('100.00 %')
+        expect(rows.first.locator('td[name="supplier_otd_display"]')).to_have_text(percent(100))
         heading = page.locator('th[data-name="supplier_otd_display"]')
         expect(heading).to_have_class(re.compile('.*o_column_sortable.*'))
         heading.click()
-        expect(rows.first.locator('td[name="supplier_otd_display"]')).to_have_text('10.00 %')
+        expect(rows.first.locator('td[name="supplier_otd_display"]')).to_have_text(percent(10))
         heading.click()
-        expect(rows.first.locator('td[name="supplier_otd_display"]')).to_have_text('100.00 %')
+        expect(rows.first.locator('td[name="supplier_otd_display"]')).to_have_text(percent(100))
         page.screenshot(path=str(output / 'supplier-otd-list.png'), full_page=True)
 
         vendors = rpc('res.partner', 'search_read', [[('supplier_rank', '>', 0)]], {
@@ -102,7 +118,7 @@ def main():
             open_otd_tab()
             expect(page.locator('.o_field_widget[name="supplier_otd_evaluated_count"]')).to_have_text('20')
             expect(page.locator('.o_field_widget[name="supplier_otd_percentage"]').first).to_have_text(
-                str(int(vendor['supplier_otd_percentage'])) + '.00')
+                str(int(vendor['supplier_otd_percentage'])) + labels['decimal'] + '00')
             expect(page.locator('.o_field_progressbar[name="supplier_otd_percentage"]')).to_be_visible()
             expect(page.locator('.oe_stat_button:has(.o_field_widget[name="on_time_rate"])')).to_be_hidden()
             track = page.locator('.o_supplier_otd_progress .o_progress')
@@ -126,8 +142,8 @@ def main():
         detail_rows = page.locator('.o_list_view tbody tr.o_data_row')
         expect(detail_rows).to_have_count(20)
         states05 = detail_rows.locator('td[name="supplier_otd_status"]').all_text_contents()
-        assert sum(value.strip() == 'Puntual' for value in states05) == 10
-        assert sum(value.strip() == 'Amb retard' for value in states05) == 10
+        assert sum(value.strip() == labels['on_time'] for value in states05) == 10
+        assert sum(value.strip() == labels['late'] for value in states05) == 10
         for field in ('order_id', 'product_id', 'supplier_otd_deadline', 'supplier_otd_completed_at'):
             values = detail_rows.locator('td[name="' + field + '"]').all_text_contents()
             assert len(values) == 20 and all(value.strip() for value in values), field
@@ -142,11 +158,11 @@ def main():
         page.goto(overview, wait_until='domcontentloaded')
         expect(rows).to_have_count(10)
         page.locator('.o_searchview_dropdown_toggler').click()
-        page.get_by_text('OTD inferior al 50 %', exact=True).click()
+        page.get_by_text(labels['filter'], exact=True).click()
         page.keyboard.press('Escape')
         expect(rows).to_have_count(4)
         filtered = rows.locator('td[name="supplier_otd_display"]').all_text_contents()
-        assert [value.strip() for value in filtered] == ['40.00 %', '30.00 %', '20.00 %', '10.00 %']
+        assert [value.strip() for value in filtered] == [percent(value) for value in (40, 30, 20, 10)]
         page.screenshot(path=str(output / 'supplier-otd-filter.png'), full_page=True)
         with page.expect_response(lambda response: '/res.partner/web_read' in response.url) as pending:
             rows.first.locator('td[name="name"]').click()
@@ -156,20 +172,39 @@ def main():
         audit_rows = page.locator('.o_list_view tbody tr.o_data_row')
         expect(audit_rows).to_have_count(20)
         states = audit_rows.locator('td[name="supplier_otd_status"]').all_text_contents()
-        assert sum(value.strip() == 'Puntual' for value in states) == 8
-        assert sum(value.strip() == 'Amb retard' for value in states) == 12
+        assert sum(value.strip() == labels['on_time'] for value in states) == 8
+        assert sum(value.strip() == labels['late'] for value in states) == 12
         page.screenshot(path=str(output / 'supplier-otd-lines.png'), full_page=True)
 
         empty_id = rpc('res.partner', 'create', [{'name': '[UI TEST] Sense dades', 'supplier_rank': 1}])
         try:
             page.goto(overview, wait_until='domcontentloaded')
             expect(rows).to_have_count(11)
-            expect(rows.last.locator('td[name="supplier_otd_display"]')).to_have_text('Sense dades')
+            expect(rows.last.locator('td[name="supplier_otd_display"]')).to_have_text(labels['no_data'])
         finally:
             rpc('res.partner', 'unlink', [[empty_id]])
+        page.goto(overview, wait_until='domcontentloaded')
+        expect(page.locator('.o_menu_sections').get_by_text(labels['menu'], exact=True)).to_be_visible()
+        # Explicit browser-test fixture, only in the guarded temporary database.
+        product = rpc('product.product', 'search_read', [[('name', 'ilike', '[OTD DEMO v1]')]], {'fields': ['id', 'uom_id'], 'limit': 1})[0]
+        test_order = rpc('purchase.order', 'create', [{'partner_id': vendors[0]['id'], 'order_line': [[0, 0, {'product_id': product['id'], 'name': '[I18N UI TEST] Wizard', 'product_qty': 1, 'product_uom': product['uom_id'][0], 'price_unit': 1, 'date_planned': '2026-11-15 10:00:00'}]]}])
+        rpc('purchase.order', 'button_confirm', [[test_order]])
+        test_line = rpc('purchase.order', 'read', [[test_order]], {'fields': ['order_line']})[0]['order_line'][0]
+        rpc('purchase.order.line', 'write', [[test_line], {'date_planned': '2026-11-18 10:00:00'}])
+        revision = rpc('supplier.evaluation.deadline.revision', 'search_read', [[('purchase_line_id', '=', test_line)]], {'fields': ['id'], 'order': 'sequence desc,id desc', 'limit': 1})[0]['id']
+        revision_action = rpc('ir.model.data', 'search_read', [[('module', '=', 'supplier_evaluation'), ('name', '=', 'action_deadline_revisions')]], {'fields': ['res_id']})[0]['res_id']
+        page.goto(base + '/odoo/action-' + str(revision_action) + '/' + str(revision), wait_until='domcontentloaded')
+        page.locator('button[name="action_open_renegotiation_wizard"]').click()
+        dialog = page.get_by_role('dialog')
+        expect(dialog).to_be_visible()
+        expect(dialog).to_contain_text(labels['wizard'])
+        expect(dialog).to_contain_text(labels['warning'])
+        expect(dialog.get_by_role('button', name=labels['confirm'], exact=True)).to_be_visible()
+        page.screenshot(path=str(output / 'renegotiation-wizard.png'), full_page=True)
+        dialog.get_by_role('button', name=labels['cancel'], exact=True).click()
         assert not errors, errors
         result = {
-            'action_id': action_id, 'native_heading_sort_asc_desc': True,
+            'action_id': action_id, 'language': args.language, 'renegotiation_wizard_verified': True, 'native_heading_sort_asc_desc': True,
             'vendor_forms_verified': 10, 'percentages': checked, 'under_50_filter_rows': 4,
             'drilldown_rows': 20, 'drilldown_on_time': 8, 'drilldown_late': 12,
             'native_progressbar_visible': True, 'progress_track_min_width': min(progress_widths),

@@ -242,7 +242,7 @@ class TestSupplierOTD(DeadlineConfirmationCase):
         page = arch.xpath(".//page[@name='supplier_otd']")[0]
         for name in SUMMARY:
             self.assertTrue(page.xpath(".//field[@name='%s']" % name))
-        self.assertTrue(page.xpath(".//span[@invisible='supplier_otd_has_data' and text()='Sense dades']"))
+        self.assertTrue(page.xpath(".//span[@invisible='supplier_otd_has_data' and text()='No data']"))
         self.assertTrue(page.xpath(".//span[@invisible='not supplier_otd_has_data']/field[@name='supplier_otd_percentage']"))
         stock_arch = etree.fromstring(self.env['res.partner'].with_user(self.warehouse_user).get_view(view_id, view_type='form')['arch'])
         self.assertFalse(stock_arch.xpath(".//page[@name='supplier_otd']"))

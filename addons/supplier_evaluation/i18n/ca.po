@@ -1,0 +1,1044 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+# 	* supplier_evaluation
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 18.0-20260305\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-10-29 23:47+0000\n"
+"PO-Revision-Date: 2026-10-29 23:47+0000\n"
+"Last-Translator: \n"
+"Language-Team: Catalan\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: ca_ES\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+#. module: supplier_evaluation
+#: model_terms:ir.ui.view,arch_db:supplier_evaluation.res_partner_form_supplier_otd
+msgid ""
+"<span invisible=\"supplier_otd_has_data\" class=\"fs-4 text-muted\">No "
+"data</span>"
+msgstr "<span invisible=\"supplier_otd_has_data\" class=\"fs-4 text-muted\">Sense dades</span>"
+
+#. module: supplier_evaluation
+#. odoo-python
+#: code:addons/supplier_evaluation/models/purchase_order_line.py:0
+msgid "A line with deadline history cannot be moved."
+msgstr "No es pot traslladar una línia amb historial de terminis."
+
+#. module: supplier_evaluation
+#: model:ir.model.constraint,message:supplier_evaluation.constraint_supplier_evaluation_deadline_confirmation_different_dates
+msgid "A renegotiation must change the accepted date."
+msgstr "Una renegociació ha de canviar la data acceptada."
+
+#. module: supplier_evaluation
+#: model:ir.model.fields,field_description:supplier_evaluation.field_stock_move__supplier_agreed_date_snapshot
+msgid "Accepted deadline snapshot"
+msgstr "Captura del termini acceptat"
+
+#. module: supplier_evaluation
+#: model:ir.model.fields.selection,name:supplier_evaluation.selection__supplier_evaluation_deadline_revision__revision_type__advance
+msgid "Advance"
+msgstr "Avançament"
+
+#. module: supplier_evaluation
+#: model:ir.model.fields,field_description:supplier_evaluation.field_supplier_evaluation_deadline_renegotiation_wizard__justification
+msgid "Agreement justification"
+msgstr "Justificació de l'acord"
+
+#. module: supplier_evaluation
+#. odoo-python
+#: code:addons/supplier_evaluation/models/deadline_confirmation.py:0
+msgid "Agreements can only be confirmed for approved purchase lines."
+msgstr "Només es poden confirmar acords de línies de compra aprovades."
+
+#. module: supplier_evaluation
+#: model:ir.model.fields,field_description:supplier_evaluation.field_purchase_order_line__supplier_otd_confirmation_id
+msgid "Applied agreement"
+msgstr "Acord aplicat"
+
+#. module: supplier_evaluation
+#: model:ir.model.fields,field_description:supplier_evaluation.field_supplier_evaluation_deadline_confirmation__supplier_attributable
+#: model_terms:ir.ui.view,arch_db:supplier_evaluation.view_deadline_confirmation_form
+#: model_terms:ir.ui.view,arch_db:supplier_evaluation.view_deadline_confirmation_list
+#: model_terms:ir.ui.view,arch_db:supplier_evaluation.view_deadline_confirmation_search
+#: model_terms:ir.ui.view,arch_db:supplier_evaluation.view_deadline_revision_form
+msgid "Attributable to supplier"
+msgstr "Atribuïble al proveïdor"
+
+#. module: supplier_evaluation
+#: model_terms:ir.ui.view,arch_db:supplier_evaluation.view_deadline_renegotiation_wizard_form
+msgid "Cancel"
+msgstr "Cancel·lar"
+
+#. module: supplier_evaluation
+#: model:ir.model.fields,field_description:supplier_evaluation.field_res_partner__supplier_otd_line_ids
+#: model:ir.model.fields,field_description:supplier_evaluation.field_res_users__supplier_otd_line_ids
+msgid "Captured OTD lines"
+msgstr "Línies OTD capturades"
+
+#. module: supplier_evaluation
+#: model:ir.model.fields,field_description:supplier_evaluation.field_stock_move__supplier_deadline_revision_id
+msgid "Captured deadline revision"
+msgstr "Revisió de termini capturada"
+
+#. module: supplier_evaluation
+#: model:ir.model.fields,field_description:supplier_evaluation.field_purchase_order_line__supplier_otd_ordered_qty
+#: model_terms:ir.ui.view,arch_db:supplier_evaluation.view_supplier_otd_line_form
+msgid "Captured ordered quantity"
+msgstr "Quantitat demanada capturada"
+
+#. module: supplier_evaluation
+#: model:ir.model.fields,field_description:supplier_evaluation.field_purchase_order_line__supplier_otd_received_qty
+#: model_terms:ir.ui.view,arch_db:supplier_evaluation.view_supplier_otd_line_form
+msgid "Captured received quantity"
+msgstr "Quantitat rebuda capturada"
+
+#. module: supplier_evaluation
+#: model:ir.model.fields,field_description:supplier_evaluation.field_purchase_order_line__supplier_otd_supplier_id
+#: model_terms:ir.ui.view,arch_db:supplier_evaluation.view_supplier_otd_line_form
+msgid "Captured supplier"
+msgstr "Proveïdor capturat"
+
+#. module: supplier_evaluation
+#: model:ir.model.fields,field_description:supplier_evaluation.field_purchase_order_line__supplier_otd_uom_id
+msgid "Captured unit of measure"
+msgstr "Unitat de mesura capturada"
+
+#. module: supplier_evaluation
+#: model:ir.model.fields,field_description:supplier_evaluation.field_supplier_evaluation_deadline_renegotiation_wizard__supplier_attributable
+msgid "Change attribution"
+msgstr "Atribució del canvi"
+
+#. module: supplier_evaluation
+#: model:ir.model.fields,field_description:supplier_evaluation.field_supplier_evaluation_deadline_revision__change_source
+msgid "Change source"
+msgstr "Origen del canvi"
+
+#. module: supplier_evaluation
+#: model:ir.model.fields,field_description:supplier_evaluation.field_supplier_evaluation_deadline_revision__changed_at
+#: model_terms:ir.ui.view,arch_db:supplier_evaluation.view_deadline_revision_form
+#: model_terms:ir.ui.view,arch_db:supplier_evaluation.view_deadline_revision_list
+msgid "Change time"
+msgstr "Moment del canvi"
+
+#. module: supplier_evaluation
+#: model:ir.model.fields,field_description:supplier_evaluation.field_supplier_evaluation_deadline_revision__changed_by_id
+msgid "Changed by"
+msgstr "Modificat per"
+
+#. module: supplier_evaluation
+#: model:ir.model.fields,field_description:supplier_evaluation.field_supplier_evaluation_deadline_confirmation__company_id
+#: model:ir.model.fields,field_description:supplier_evaluation.field_supplier_evaluation_deadline_renegotiation_wizard__company_id
+#: model:ir.model.fields,field_description:supplier_evaluation.field_supplier_evaluation_deadline_revision__company_id
+msgid "Company"
+msgstr "Empresa"
+
+#. module: supplier_evaluation
+#: model:ir.model.fields,field_description:supplier_evaluation.field_purchase_order_line__supplier_otd_status
+msgid "Completed-line OTD"
+msgstr "OTD línia completada"
+
+#. module: supplier_evaluation
+#. odoo-python
+#: code:addons/supplier_evaluation/models/deadline_revision.py:0
+#: model_terms:ir.ui.view,arch_db:supplier_evaluation.view_deadline_renegotiation_wizard_form
+msgid "Confirm deadline renegotiation"
+msgstr "Confirmar renegociació de termini"
+
+#. module: supplier_evaluation
+#: model_terms:ir.ui.view,arch_db:supplier_evaluation.view_deadline_renegotiation_wizard_form
+#: model_terms:ir.ui.view,arch_db:supplier_evaluation.view_deadline_revision_form
+#: model_terms:ir.ui.view,arch_db:supplier_evaluation.view_deadline_revision_list
+msgid "Confirm renegotiation"
+msgstr "Confirmar renegociació"
+
+#. module: supplier_evaluation
+#: model:ir.model,name:supplier_evaluation.model_supplier_evaluation_deadline_renegotiation_wizard
+msgid "Confirm supplier deadline renegotiation"
+msgstr "Confirmar renegociació de termini del proveïdor"
+
+#. module: supplier_evaluation
+#: model:ir.model.fields,field_description:supplier_evaluation.field_supplier_evaluation_deadline_confirmation__confirmed_at
+#: model_terms:ir.ui.view,arch_db:supplier_evaluation.view_deadline_confirmation_form
+#: model_terms:ir.ui.view,arch_db:supplier_evaluation.view_deadline_confirmation_list
+msgid "Confirmation time"
+msgstr "Moment de confirmació"
+
+#. module: supplier_evaluation
+#: model:ir.model.fields,field_description:supplier_evaluation.field_supplier_evaluation_deadline_confirmation__confirmed_by_id
+#: model_terms:ir.ui.view,arch_db:supplier_evaluation.view_deadline_confirmation_form
+#: model_terms:ir.ui.view,arch_db:supplier_evaluation.view_deadline_confirmation_list
+#: model_terms:ir.ui.view,arch_db:supplier_evaluation.view_deadline_revision_form
+msgid "Confirmed by"
+msgstr "Confirmat per"
+
+#. module: supplier_evaluation
+#. odoo-python
+#: code:addons/supplier_evaluation/models/deadline_revision.py:0
+#: model_terms:ir.ui.view,arch_db:supplier_evaluation.view_deadline_confirmation_form
+msgid "Confirmed renegotiation"
+msgstr "Renegociació confirmada"
+
+#. module: supplier_evaluation
+#: model:ir.actions.act_window,name:supplier_evaluation.action_deadline_confirmations
+#: model:ir.model.fields,field_description:supplier_evaluation.field_purchase_order_line__supplier_deadline_confirmation_ids
+#: model:ir.ui.menu,name:supplier_evaluation.menu_supplier_deadline_confirmations
+#: model_terms:ir.ui.view,arch_db:supplier_evaluation.view_deadline_confirmation_list
+#: model_terms:ir.ui.view,arch_db:supplier_evaluation.view_deadline_confirmation_search
+msgid "Confirmed renegotiations"
+msgstr "Renegociacions confirmades"
+
+#. module: supplier_evaluation
+#: model_terms:ir.ui.view,arch_db:supplier_evaluation.view_deadline_confirmation_form
+msgid "Confirmed revision"
+msgstr "Revisió confirmada"
+
+#. module: supplier_evaluation
+#: model:ir.model,name:supplier_evaluation.model_supplier_evaluation_deadline_confirmation
+msgid "Confirmed supplier deadline renegotiation"
+msgstr "Renegociació de termini del proveïdor confirmada"
+
+#. module: supplier_evaluation
+#: model_terms:ir.ui.view,arch_db:supplier_evaluation.view_deadline_renegotiation_wizard_form
+msgid ""
+"Confirming a renegotiation does not remove the original commitment.\n"
+"                    History and completed receipt evaluations are preserved."
+msgstr "Confirmar una renegociació no elimina el compromís original.\n                    L'historial i les avaluacions de recepcions completades es conserven."
+
+#. module: supplier_evaluation
+#: model:ir.model,name:supplier_evaluation.model_res_partner
+msgid "Contact"
+msgstr "Contacte"
+
+#. module: supplier_evaluation
+#: model:ir.model.fields,field_description:supplier_evaluation.field_supplier_evaluation_deadline_confirmation__create_uid
+#: model:ir.model.fields,field_description:supplier_evaluation.field_supplier_evaluation_deadline_renegotiation_wizard__create_uid
+#: model:ir.model.fields,field_description:supplier_evaluation.field_supplier_evaluation_deadline_revision__create_uid
+msgid "Created by"
+msgstr "Creat per"
+
+#. module: supplier_evaluation
+#: model:ir.model.fields,field_description:supplier_evaluation.field_supplier_evaluation_deadline_confirmation__create_date
+#: model:ir.model.fields,field_description:supplier_evaluation.field_supplier_evaluation_deadline_renegotiation_wizard__create_date
+#: model:ir.model.fields,field_description:supplier_evaluation.field_supplier_evaluation_deadline_revision__create_date
+msgid "Created on"
+msgstr "Creat el"
+
+#. module: supplier_evaluation
+#: model:ir.model.fields.selection,name:supplier_evaluation.selection__supplier_evaluation_deadline_revision__change_direction__removed
+#: model:ir.model.fields.selection,name:supplier_evaluation.selection__supplier_evaluation_deadline_revision__revision_type__date_removed
+msgid "Date removed"
+msgstr "Data retirada"
+
+#. module: supplier_evaluation
+#: model:ir.model.fields.selection,name:supplier_evaluation.selection__supplier_evaluation_deadline_revision__change_direction__set
+#: model:ir.model.fields.selection,name:supplier_evaluation.selection__supplier_evaluation_deadline_revision__revision_type__date_set
+msgid "Date set"
+msgstr "Data informada"
+
+#. module: supplier_evaluation
+#: model:ir.model.fields,field_description:supplier_evaluation.field_stock_move__supplier_deadline_captured_at
+msgid "Deadline captured on"
+msgstr "Termini capturat el"
+
+#. module: supplier_evaluation
+#: model:ir.actions.act_window,name:supplier_evaluation.action_deadline_revisions
+#: model:ir.model.fields,field_description:supplier_evaluation.field_purchase_order_line__supplier_deadline_revision_ids
+#: model:ir.ui.menu,name:supplier_evaluation.menu_supplier_deadline_revisions
+#: model_terms:ir.ui.view,arch_db:supplier_evaluation.purchase_order_form_supplier_deadlines
+#: model_terms:ir.ui.view,arch_db:supplier_evaluation.view_deadline_revision_list
+#: model_terms:ir.ui.view,arch_db:supplier_evaluation.view_deadline_revision_search
+msgid "Deadline history"
+msgstr "Historial de terminis"
+
+#. module: supplier_evaluation
+#. odoo-python
+#: code:addons/supplier_evaluation/models/deadline_revision.py:0
+msgid "Deadline history cannot be deleted."
+msgstr "No es pot eliminar l'historial de terminis."
+
+#. module: supplier_evaluation
+#: model:ir.model.fields,field_description:supplier_evaluation.field_supplier_evaluation_deadline_confirmation__revision_id
+#: model:ir.model.fields,field_description:supplier_evaluation.field_supplier_evaluation_deadline_renegotiation_wizard__revision_id
+#: model_terms:ir.ui.view,arch_db:supplier_evaluation.view_deadline_revision_form
+msgid "Deadline revision"
+msgstr "Revisió de termini"
+
+#. module: supplier_evaluation
+#. odoo-python
+#: code:addons/supplier_evaluation/models/deadline_revision.py:0
+msgid "Deadline revisions are immutable."
+msgstr "Les revisions de termini són immutables."
+
+#. module: supplier_evaluation
+#: model:ir.model.fields,field_description:supplier_evaluation.field_purchase_order_line__supplier_otd_completed_at
+msgid "Delivery completed on"
+msgstr "Línia completada el"
+
+#. module: supplier_evaluation
+#: model_terms:ir.ui.view,arch_db:supplier_evaluation.res_partner_form_supplier_otd
+msgid "Delivery punctuality"
+msgstr "Puntualitat de lliurament"
+
+#. module: supplier_evaluation
+#: model_terms:ir.ui.view,arch_db:supplier_evaluation.view_deadline_renegotiation_wizard_form
+msgid "Describe the agreement and reference the supplier communication"
+msgstr "Descriu l'acord i la referència de la comunicació amb el proveïdor"
+
+#. module: supplier_evaluation
+#: model:ir.model.fields,field_description:supplier_evaluation.field_supplier_evaluation_deadline_confirmation__change_direction
+#: model:ir.model.fields,field_description:supplier_evaluation.field_supplier_evaluation_deadline_revision__change_direction
+#: model_terms:ir.ui.view,arch_db:supplier_evaluation.view_deadline_confirmation_form
+#: model_terms:ir.ui.view,arch_db:supplier_evaluation.view_deadline_confirmation_list
+#: model_terms:ir.ui.view,arch_db:supplier_evaluation.view_deadline_revision_form
+#: model_terms:ir.ui.view,arch_db:supplier_evaluation.view_deadline_revision_list
+msgid "Direction"
+msgstr "Direcció"
+
+#. module: supplier_evaluation
+#: model:ir.model.fields,field_description:supplier_evaluation.field_supplier_evaluation_deadline_confirmation__display_name
+#: model:ir.model.fields,field_description:supplier_evaluation.field_supplier_evaluation_deadline_renegotiation_wizard__display_name
+#: model:ir.model.fields,field_description:supplier_evaluation.field_supplier_evaluation_deadline_revision__display_name
+msgid "Display Name"
+msgstr "Nom mostrat"
+
+#. module: supplier_evaluation
+#: model_terms:ir.ui.view,arch_db:supplier_evaluation.res_partner_form_supplier_otd
+msgid "Each line counts once. Selected companies."
+msgstr "Cada línia compta una vegada. Empreses seleccionades."
+
+#. module: supplier_evaluation
+#: model:ir.model.fields.selection,name:supplier_evaluation.selection__supplier_evaluation_deadline_confirmation__change_direction__advanced
+#: model:ir.model.fields.selection,name:supplier_evaluation.selection__supplier_evaluation_deadline_revision__change_direction__advanced
+msgid "Earlier deadline"
+msgstr "Termini anterior"
+
+#. module: supplier_evaluation
+#: model_terms:ir.ui.view,arch_db:supplier_evaluation.res_partner_form_supplier_otd
+msgid "Evaluated"
+msgstr "Avaluades"
+
+#. module: supplier_evaluation
+#: model_terms:ir.ui.view,arch_db:supplier_evaluation.view_supplier_otd_line_form
+msgid "Evaluated line"
+msgstr "Línia avaluada"
+
+#. module: supplier_evaluation
+#: model:ir.actions.act_window,name:supplier_evaluation.action_supplier_otd_lines
+#: model:ir.model.fields,field_description:supplier_evaluation.field_res_partner__supplier_otd_evaluated_count
+#: model:ir.model.fields,field_description:supplier_evaluation.field_res_users__supplier_otd_evaluated_count
+#: model_terms:ir.ui.view,arch_db:supplier_evaluation.view_supplier_otd_line_list
+msgid "Evaluated lines"
+msgstr "Línies avaluades"
+
+#. module: supplier_evaluation
+#: model:ir.model.fields,field_description:supplier_evaluation.field_stock_picking__supplier_evaluation_captured_at
+msgid "Evaluation captured on"
+msgstr "Avaluació capturada el"
+
+#. module: supplier_evaluation
+#. odoo-python
+#: code:addons/supplier_evaluation/models/stock_picking.py:0
+msgid "Evaluations can only be created when validating a receipt."
+msgstr "L'avaluació només es pot crear en validar la recepció."
+
+#. module: supplier_evaluation
+#. odoo-python
+#: code:addons/supplier_evaluation/models/deadline_confirmation.py:0
+#: code:addons/supplier_evaluation/wizard/deadline_renegotiation.py:0
+msgid ""
+"Explicitly indicate whether the change is attributable to the supplier."
+msgstr "Cal indicar explícitament si el canvi és atribuïble al proveïdor."
+
+#. module: supplier_evaluation
+#: model:ir.model.fields,field_description:supplier_evaluation.field_res_partner__supplier_otd_has_data
+#: model:ir.model.fields,field_description:supplier_evaluation.field_res_users__supplier_otd_has_data
+msgid "Has evaluated lines"
+msgstr "Té línies avaluades"
+
+#. module: supplier_evaluation
+#: model:ir.model.fields,field_description:supplier_evaluation.field_supplier_evaluation_deadline_confirmation__id
+#: model:ir.model.fields,field_description:supplier_evaluation.field_supplier_evaluation_deadline_renegotiation_wizard__id
+#: model:ir.model.fields,field_description:supplier_evaluation.field_supplier_evaluation_deadline_revision__id
+msgid "ID"
+msgstr "ID"
+
+#. module: supplier_evaluation
+#: model:ir.model.fields,help:supplier_evaluation.field_stock_picking__supplier_punctuality
+msgid ""
+"Immutable outcome based on agreements recorded before validation; 24-hour "
+"tolerance."
+msgstr "Resultat immutable segons els acords previs a la validació; tolerància de 24 hores."
+
+#. module: supplier_evaluation
+#: model:ir.model.fields.selection,name:supplier_evaluation.selection__supplier_evaluation_deadline_revision__revision_type__unknown_initial
+msgid "Initialization without history"
+msgstr "Inicialització sense historial"
+
+#. module: supplier_evaluation
+#: model:ir.model.fields,field_description:supplier_evaluation.field_supplier_evaluation_deadline_confirmation__justification
+#: model_terms:ir.ui.view,arch_db:supplier_evaluation.view_deadline_confirmation_form
+#: model_terms:ir.ui.view,arch_db:supplier_evaluation.view_deadline_revision_form
+msgid "Justification"
+msgstr "Justificació"
+
+#. module: supplier_evaluation
+#: model:ir.model.fields,field_description:supplier_evaluation.field_supplier_evaluation_deadline_confirmation__write_uid
+#: model:ir.model.fields,field_description:supplier_evaluation.field_supplier_evaluation_deadline_renegotiation_wizard__write_uid
+#: model:ir.model.fields,field_description:supplier_evaluation.field_supplier_evaluation_deadline_revision__write_uid
+msgid "Last Updated by"
+msgstr "Darrera actualització per"
+
+#. module: supplier_evaluation
+#: model:ir.model.fields,field_description:supplier_evaluation.field_supplier_evaluation_deadline_confirmation__write_date
+#: model:ir.model.fields,field_description:supplier_evaluation.field_supplier_evaluation_deadline_renegotiation_wizard__write_date
+#: model:ir.model.fields,field_description:supplier_evaluation.field_supplier_evaluation_deadline_revision__write_date
+msgid "Last Updated on"
+msgstr "Darrera actualització el"
+
+#. module: supplier_evaluation
+#: model:ir.model.fields.selection,name:supplier_evaluation.selection__purchase_order_line__supplier_otd_status__late
+#: model:ir.model.fields.selection,name:supplier_evaluation.selection__stock_move__supplier_punctuality__late
+#: model:ir.model.fields.selection,name:supplier_evaluation.selection__stock_picking__supplier_punctuality__late
+#: model_terms:ir.ui.view,arch_db:supplier_evaluation.res_partner_form_supplier_otd
+msgid "Late"
+msgstr "Amb retard"
+
+#. module: supplier_evaluation
+#: model:ir.model.fields,field_description:supplier_evaluation.field_res_partner__supplier_otd_late_count
+#: model:ir.model.fields,field_description:supplier_evaluation.field_res_users__supplier_otd_late_count
+msgid "Late lines"
+msgstr "Línies tardanes"
+
+#. module: supplier_evaluation
+#: model:ir.model.fields.selection,name:supplier_evaluation.selection__supplier_evaluation_deadline_confirmation__change_direction__postponed
+#: model:ir.model.fields.selection,name:supplier_evaluation.selection__supplier_evaluation_deadline_revision__change_direction__postponed
+msgid "Later deadline"
+msgstr "Termini posterior"
+
+#. module: supplier_evaluation
+#: model:ir.model.fields,field_description:supplier_evaluation.field_supplier_evaluation_deadline_revision__line_description
+#: model_terms:ir.ui.view,arch_db:supplier_evaluation.view_deadline_revision_form
+msgid "Line description"
+msgstr "Descripció de la línia"
+
+#. module: supplier_evaluation
+#. odoo-python
+#: code:addons/supplier_evaluation/models/purchase_line_otd.py:0
+msgid "Lines with OTD snapshots cannot be deleted."
+msgstr "No es poden eliminar línies amb captures OTD."
+
+#. module: supplier_evaluation
+#. odoo-python
+#: code:addons/supplier_evaluation/models/stock_move.py:0
+msgid "Moves with historical snapshots cannot be deleted."
+msgstr "No es poden eliminar moviments amb captures històriques."
+
+#. module: supplier_evaluation
+#: model:ir.model.fields,field_description:supplier_evaluation.field_supplier_evaluation_deadline_confirmation__new_agreed_date
+#: model:ir.model.fields,field_description:supplier_evaluation.field_supplier_evaluation_deadline_renegotiation_wizard__new_agreed_date
+#: model_terms:ir.ui.view,arch_db:supplier_evaluation.view_deadline_confirmation_form
+#: model_terms:ir.ui.view,arch_db:supplier_evaluation.view_deadline_confirmation_list
+#: model_terms:ir.ui.view,arch_db:supplier_evaluation.view_deadline_revision_form
+msgid "New accepted date"
+msgstr "Nova data acceptada"
+
+#. module: supplier_evaluation
+#: model:ir.model.fields,field_description:supplier_evaluation.field_supplier_evaluation_deadline_revision__new_date
+#: model_terms:ir.ui.view,arch_db:supplier_evaluation.view_deadline_revision_form
+#: model_terms:ir.ui.view,arch_db:supplier_evaluation.view_deadline_revision_list
+msgid "New planned date"
+msgstr "Nova previsió"
+
+#. module: supplier_evaluation
+#: model_terms:ir.ui.view,arch_db:supplier_evaluation.view_deadline_renegotiation_wizard_form
+msgid "New proposed date"
+msgstr "Nova data proposada"
+
+#. module: supplier_evaluation
+#. odoo-python
+#: code:addons/supplier_evaluation/models/res_partner.py:0
+#: model_terms:ir.ui.view,arch_db:supplier_evaluation.view_supplier_otd_search
+msgid "No data"
+msgstr "Sense dades"
+
+#. module: supplier_evaluation
+#. odoo-python
+#: code:addons/supplier_evaluation/models/deadline_confirmation.py:0
+msgid ""
+"No previous accepted date is known; a historical agreement cannot be "
+"invented."
+msgstr "No es coneix cap data acceptada anterior; no es pot inventar un acord històric."
+
+#. module: supplier_evaluation
+#. odoo-python
+#: code:addons/supplier_evaluation/models/deadline_confirmation.py:0
+msgid "No verified previous agreement is recorded for this supplier."
+msgstr "No consta cap acord anterior acreditat per a aquest proveïdor."
+
+#. module: supplier_evaluation
+#: model:ir.model.fields.selection,name:supplier_evaluation.selection__supplier_evaluation_deadline_renegotiation_wizard__supplier_attributable__no
+msgid "No, not attributable to the supplier"
+msgstr "No, no atribuïble al proveïdor"
+
+#. module: supplier_evaluation
+#: model:ir.model.fields.selection,name:supplier_evaluation.selection__supplier_evaluation_deadline_revision__change_source__unverified
+msgid "ORM persistence; unverified origin"
+msgstr "Persistència ORM; origen no verificat"
+
+#. module: supplier_evaluation
+#: model:ir.model.fields,field_description:supplier_evaluation.field_res_partner__supplier_otd_display
+#: model:ir.model.fields,field_description:supplier_evaluation.field_res_users__supplier_otd_display
+#: model_terms:ir.ui.view,arch_db:supplier_evaluation.view_supplier_otd_list
+msgid "OTD"
+msgstr "OTD"
+
+#. module: supplier_evaluation
+#: model_terms:ir.ui.view,arch_db:supplier_evaluation.view_supplier_otd_search
+msgid "OTD below 50%"
+msgstr "OTD inferior al 50 %"
+
+#. module: supplier_evaluation
+#. odoo-python
+#: code:addons/supplier_evaluation/models/purchase_line_otd.py:0
+msgid "OTD can only be captured when completing a line."
+msgstr "L'OTD només es pot capturar en completar una línia."
+
+#. module: supplier_evaluation
+#: model:ir.model.fields,field_description:supplier_evaluation.field_purchase_order_line__supplier_otd_captured_at
+msgid "OTD captured on"
+msgstr "OTD capturat el"
+
+#. module: supplier_evaluation
+#: model:ir.model.fields,field_description:supplier_evaluation.field_purchase_order_line__supplier_otd_deadline
+msgid "OTD deadline"
+msgstr "Termini OTD"
+
+#. module: supplier_evaluation
+#: model_terms:ir.ui.view,arch_db:supplier_evaluation.res_partner_form_supplier_otd
+msgid "OTD evaluation"
+msgstr "Avaluació OTD"
+
+#. module: supplier_evaluation
+#: model:ir.model.fields,field_description:supplier_evaluation.field_res_partner__supplier_otd_percentage
+#: model:ir.model.fields,field_description:supplier_evaluation.field_res_users__supplier_otd_percentage
+msgid "OTD percentage"
+msgstr "Percentatge OTD"
+
+#. module: supplier_evaluation
+#: model:ir.model.fields.selection,name:supplier_evaluation.selection__purchase_order_line__supplier_otd_status__on_time
+#: model:ir.model.fields.selection,name:supplier_evaluation.selection__stock_move__supplier_punctuality__on_time
+#: model:ir.model.fields.selection,name:supplier_evaluation.selection__stock_picking__supplier_punctuality__on_time
+#: model_terms:ir.ui.view,arch_db:supplier_evaluation.res_partner_form_supplier_otd
+msgid "On time"
+msgstr "Puntual"
+
+#. module: supplier_evaluation
+#: model:ir.model.fields,field_description:supplier_evaluation.field_res_partner__supplier_otd_on_time_count
+#: model:ir.model.fields,field_description:supplier_evaluation.field_res_users__supplier_otd_on_time_count
+msgid "On-time lines"
+msgstr "Línies puntuals"
+
+#. module: supplier_evaluation
+#: model:ir.model.fields,help:supplier_evaluation.field_res_partner__supplier_otd_percentage
+#: model:ir.model.fields,help:supplier_evaluation.field_res_users__supplier_otd_percentage
+msgid ""
+"On-time lines / evaluated lines × 100. Each line counts once, regardless of "
+"quantity or price."
+msgstr "Línies puntuals / línies avaluades × 100. Cada línia compta una vegada, sense ponderació per quantitat o preu."
+
+#. module: supplier_evaluation
+#: model:ir.model.fields,help:supplier_evaluation.field_purchase_order_line__supplier_otd_status
+msgid ""
+"One observation per completed line; 24-hour tolerance. Empty: not yet "
+"evaluated."
+msgstr "Una observació per línia completada; tolerància de 24 hores. Buit: encara no avaluada."
+
+#. module: supplier_evaluation
+#. odoo-python
+#: code:addons/supplier_evaluation/models/deadline_confirmation.py:0
+#: code:addons/supplier_evaluation/models/deadline_revision.py:0
+#: code:addons/supplier_evaluation/wizard/deadline_renegotiation.py:0
+msgid "Only Purchase managers can confirm renegotiations."
+msgstr "Només els responsables de compres poden confirmar renegociacions."
+
+#. module: supplier_evaluation
+#. odoo-python
+#: code:addons/supplier_evaluation/models/res_partner.py:0
+msgid "Only Purchase users can view aggregated OTD."
+msgstr "Només els usuaris de compres poden consultar l'OTD agregat."
+
+#. module: supplier_evaluation
+#. odoo-python
+#: code:addons/supplier_evaluation/wizard/deadline_renegotiation.py:0
+msgid "Open a new wizard to change the selected revision."
+msgstr "Cal obrir un altre assistent per canviar la revisió seleccionada."
+
+#. module: supplier_evaluation
+#: model:ir.model.fields,field_description:supplier_evaluation.field_supplier_evaluation_deadline_revision__order_reference
+msgid "Order reference"
+msgstr "Referència de comanda"
+
+#. module: supplier_evaluation
+#: model:ir.model.fields,field_description:supplier_evaluation.field_supplier_evaluation_deadline_renegotiation_wizard__original_date
+#: model:ir.model.fields.selection,name:supplier_evaluation.selection__supplier_evaluation_deadline_revision__revision_type__initial
+msgid "Original commitment"
+msgstr "Compromís original"
+
+#. module: supplier_evaluation
+#: model:ir.model.fields,field_description:supplier_evaluation.field_purchase_order_line__supplier_original_date_known
+#: model:ir.model.fields,field_description:supplier_evaluation.field_supplier_evaluation_deadline_renegotiation_wizard__original_date_known
+msgid "Original commitment known"
+msgstr "Compromís original conegut"
+
+#. module: supplier_evaluation
+#: model:ir.model.fields,field_description:supplier_evaluation.field_purchase_order_line__supplier_original_date_pending
+msgid "Original commitment pending"
+msgstr "Compromís original pendent"
+
+#. module: supplier_evaluation
+#. odoo-python
+#: code:addons/supplier_evaluation/models/purchase_order_line.py:0
+msgid "Original commitments are managed by the module."
+msgstr "Els compromisos originals els gestiona el mòdul."
+
+#. module: supplier_evaluation
+#: model:ir.model.fields,field_description:supplier_evaluation.field_stock_move__supplier_original_date_snapshot
+msgid "Original deadline snapshot"
+msgstr "Captura del termini original"
+
+#. module: supplier_evaluation
+#: model:ir.model.fields,field_description:supplier_evaluation.field_purchase_order_line__supplier_original_date
+msgid "Original supplier commitment"
+msgstr "Compromís original del proveïdor"
+
+#. module: supplier_evaluation
+#: model:ir.model.fields.selection,name:supplier_evaluation.selection__supplier_evaluation_deadline_revision__revision_type__postponement
+msgid "Postponement"
+msgstr "Ajornament"
+
+#. module: supplier_evaluation
+#: model:ir.model.fields,field_description:supplier_evaluation.field_purchase_order_line__supplier_postponement_count
+msgid "Postponement count"
+msgstr "Nombre d’ajornaments"
+
+#. module: supplier_evaluation
+#: model_terms:ir.ui.view,arch_db:supplier_evaluation.view_deadline_renegotiation_wizard_form
+msgid "Preserved original commitment"
+msgstr "Compromís original conservat"
+
+#. module: supplier_evaluation
+#: model:ir.model.fields,field_description:supplier_evaluation.field_supplier_evaluation_deadline_confirmation__previous_agreed_date
+#: model:ir.model.fields,field_description:supplier_evaluation.field_supplier_evaluation_deadline_renegotiation_wizard__previous_agreed_date
+#: model_terms:ir.ui.view,arch_db:supplier_evaluation.view_deadline_confirmation_form
+#: model_terms:ir.ui.view,arch_db:supplier_evaluation.view_deadline_confirmation_list
+#: model_terms:ir.ui.view,arch_db:supplier_evaluation.view_deadline_renegotiation_wizard_form
+#: model_terms:ir.ui.view,arch_db:supplier_evaluation.view_deadline_revision_form
+msgid "Previous accepted date"
+msgstr "Data anterior acceptada"
+
+#. module: supplier_evaluation
+#: model:ir.model.fields,field_description:supplier_evaluation.field_supplier_evaluation_deadline_confirmation__previous_confirmation_id
+#: model_terms:ir.ui.view,arch_db:supplier_evaluation.view_deadline_confirmation_form
+msgid "Previous agreement"
+msgstr "Acord anterior"
+
+#. module: supplier_evaluation
+#: model:ir.model.fields,field_description:supplier_evaluation.field_supplier_evaluation_deadline_revision__previous_date
+#: model_terms:ir.ui.view,arch_db:supplier_evaluation.view_deadline_revision_form
+#: model_terms:ir.ui.view,arch_db:supplier_evaluation.view_deadline_revision_list
+msgid "Previous planned date"
+msgstr "Previsió anterior"
+
+#. module: supplier_evaluation
+#. odoo-python
+#: code:addons/supplier_evaluation/models/deadline_confirmation.py:0
+msgid "Provide a justification for the renegotiation agreement."
+msgstr "Cal justificar l'acord de renegociació."
+
+#. module: supplier_evaluation
+#: model:ir.model,name:supplier_evaluation.model_purchase_order
+msgid "Purchase Order"
+msgstr "Comanda de compra"
+
+#. module: supplier_evaluation
+#: model:ir.model,name:supplier_evaluation.model_purchase_order_line
+msgid "Purchase Order Line"
+msgstr "Línia de comanda de compra"
+
+#. module: supplier_evaluation
+#: model:ir.model.fields,field_description:supplier_evaluation.field_supplier_evaluation_deadline_confirmation__purchase_line_id
+#: model:ir.model.fields,field_description:supplier_evaluation.field_supplier_evaluation_deadline_renegotiation_wizard__purchase_line_id
+#: model:ir.model.fields,field_description:supplier_evaluation.field_supplier_evaluation_deadline_revision__purchase_line_id
+#: model_terms:ir.ui.view,arch_db:supplier_evaluation.view_deadline_confirmation_form
+#: model_terms:ir.ui.view,arch_db:supplier_evaluation.view_deadline_confirmation_list
+#: model_terms:ir.ui.view,arch_db:supplier_evaluation.view_deadline_renegotiation_wizard_form
+#: model_terms:ir.ui.view,arch_db:supplier_evaluation.view_deadline_revision_form
+#: model_terms:ir.ui.view,arch_db:supplier_evaluation.view_deadline_revision_list
+#: model_terms:ir.ui.view,arch_db:supplier_evaluation.view_deadline_revision_search
+msgid "Purchase line"
+msgstr "Línia de compra"
+
+#. module: supplier_evaluation
+#: model:ir.model.fields,field_description:supplier_evaluation.field_supplier_evaluation_deadline_confirmation__order_id
+#: model:ir.model.fields,field_description:supplier_evaluation.field_supplier_evaluation_deadline_renegotiation_wizard__order_id
+#: model:ir.model.fields,field_description:supplier_evaluation.field_supplier_evaluation_deadline_revision__order_id
+#: model_terms:ir.ui.view,arch_db:supplier_evaluation.view_deadline_confirmation_form
+#: model_terms:ir.ui.view,arch_db:supplier_evaluation.view_deadline_confirmation_list
+#: model_terms:ir.ui.view,arch_db:supplier_evaluation.view_deadline_confirmation_search
+#: model_terms:ir.ui.view,arch_db:supplier_evaluation.view_deadline_renegotiation_wizard_form
+#: model_terms:ir.ui.view,arch_db:supplier_evaluation.view_deadline_revision_form
+#: model_terms:ir.ui.view,arch_db:supplier_evaluation.view_deadline_revision_list
+#: model_terms:ir.ui.view,arch_db:supplier_evaluation.view_deadline_revision_search
+#: model_terms:ir.ui.view,arch_db:supplier_evaluation.view_supplier_otd_line_list
+msgid "Purchase order"
+msgstr "Comanda de compra"
+
+#. module: supplier_evaluation
+#: model:ir.model.fields,field_description:supplier_evaluation.field_stock_move__supplier_receipt_date_snapshot
+msgid "Receipt date snapshot"
+msgstr "Captura de la data de recepció"
+
+#. module: supplier_evaluation
+#. odoo-python
+#: code:addons/supplier_evaluation/models/stock_move.py:0
+msgid "Receipt snapshots are immutable."
+msgstr "Les captures de recepció són immutables."
+
+#. module: supplier_evaluation
+#. odoo-python
+#: code:addons/supplier_evaluation/models/stock_picking.py:0
+msgid "Receipts with historical evaluations cannot be deleted."
+msgstr "No es poden eliminar recepcions amb avaluacions històriques."
+
+#. module: supplier_evaluation
+#: model:ir.model.fields,field_description:supplier_evaluation.field_supplier_evaluation_deadline_revision__confirmation_ids
+#: model_terms:ir.ui.view,arch_db:supplier_evaluation.view_deadline_revision_form
+msgid "Recorded confirmations"
+msgstr "Confirmacions registrades"
+
+#. module: supplier_evaluation
+#. odoo-python
+#: code:addons/supplier_evaluation/models/deadline_confirmation.py:0
+msgid "Renegotiation confirmations are immutable."
+msgstr "Les confirmacions de renegociació són immutables."
+
+#. module: supplier_evaluation
+#. odoo-python
+#: code:addons/supplier_evaluation/models/deadline_confirmation.py:0
+msgid "Renegotiation confirmations cannot be deleted."
+msgstr "No es poden eliminar les confirmacions de renegociació."
+
+#. module: supplier_evaluation
+#. odoo-python
+#: code:addons/supplier_evaluation/models/deadline_confirmation.py:0
+msgid "Renegotiation confirmations cannot be duplicated."
+msgstr "Les confirmacions de renegociació no es poden duplicar."
+
+#. module: supplier_evaluation
+#: model_terms:ir.ui.view,arch_db:supplier_evaluation.view_deadline_revision_form
+#: model_terms:ir.ui.view,arch_db:supplier_evaluation.view_deadline_revision_list
+msgid "Revision"
+msgstr "Revisió"
+
+#. module: supplier_evaluation
+#: model:ir.model.fields,field_description:supplier_evaluation.field_supplier_evaluation_deadline_revision__sequence
+msgid "Revision number"
+msgstr "Número de revisió"
+
+#. module: supplier_evaluation
+#: model:ir.model.fields,field_description:supplier_evaluation.field_supplier_evaluation_deadline_revision__revision_type
+msgid "Revision type"
+msgstr "Tipus de revisió"
+
+#. module: supplier_evaluation
+#. odoo-python
+#: code:addons/supplier_evaluation/models/deadline_revision.py:0
+msgid "Revisions can only be created by deadline tracking."
+msgstr "Les revisions només es poden crear des del seguiment de terminis."
+
+#. module: supplier_evaluation
+#. odoo-python
+#: code:addons/supplier_evaluation/models/purchase_order_line.py:0
+msgid "Save a product line before viewing its deadlines."
+msgstr "Cal desar una línia de producte abans de consultar-ne els terminis."
+
+#. module: supplier_evaluation
+#. odoo-python
+#: code:addons/supplier_evaluation/models/deadline_confirmation.py:0
+msgid "Select a saved revision."
+msgstr "Cal seleccionar una revisió desada."
+
+#. module: supplier_evaluation
+#. odoo-python
+#: code:addons/supplier_evaluation/models/stock_move.py:0
+msgid "Snapshots can only be created when validating a receipt."
+msgstr "Les captures només es poden crear en validar la recepció."
+
+#. module: supplier_evaluation
+#: model_terms:ir.ui.view,arch_db:supplier_evaluation.view_deadline_revision_form
+msgid "Source"
+msgstr "Origen"
+
+#. module: supplier_evaluation
+#: model:ir.model,name:supplier_evaluation.model_stock_move
+msgid "Stock Move"
+msgstr "Moviment d'estoc"
+
+#. module: supplier_evaluation
+#: model:ir.model.fields,field_description:supplier_evaluation.field_supplier_evaluation_deadline_confirmation__supplier_id
+#: model:ir.model.fields,field_description:supplier_evaluation.field_supplier_evaluation_deadline_revision__supplier_id
+#: model_terms:ir.ui.view,arch_db:supplier_evaluation.view_deadline_confirmation_form
+#: model_terms:ir.ui.view,arch_db:supplier_evaluation.view_deadline_confirmation_list
+#: model_terms:ir.ui.view,arch_db:supplier_evaluation.view_deadline_confirmation_search
+#: model_terms:ir.ui.view,arch_db:supplier_evaluation.view_deadline_revision_form
+#: model_terms:ir.ui.view,arch_db:supplier_evaluation.view_deadline_revision_list
+#: model_terms:ir.ui.view,arch_db:supplier_evaluation.view_supplier_otd_list
+#: model_terms:ir.ui.view,arch_db:supplier_evaluation.view_supplier_otd_search
+msgid "Supplier"
+msgstr "Proveïdor"
+
+#. module: supplier_evaluation
+#: model:ir.model,name:supplier_evaluation.model_supplier_evaluation_deadline_revision
+msgid "Supplier deadline revision"
+msgstr "Revisió de termini del proveïdor"
+
+#. module: supplier_evaluation
+#: model:ir.ui.menu,name:supplier_evaluation.menu_supplier_deadlines
+msgid "Supplier deadlines"
+msgstr "Terminis de proveïdors"
+
+#. module: supplier_evaluation
+#: model:ir.actions.act_window,name:supplier_evaluation.action_supplier_otd_overview
+#: model:ir.ui.menu,name:supplier_evaluation.menu_supplier_otd_overview
+#: model_terms:ir.ui.view,arch_db:supplier_evaluation.view_supplier_otd_list
+#: model_terms:ir.ui.view,arch_db:supplier_evaluation.view_supplier_otd_search
+msgid "Supplier evaluation"
+msgstr "Avaluació de proveïdors"
+
+#. module: supplier_evaluation
+#: model:ir.model.fields,field_description:supplier_evaluation.field_supplier_evaluation_deadline_revision__supplier_name
+msgid "Supplier name"
+msgstr "Nom del proveïdor"
+
+#. module: supplier_evaluation
+#: model:ir.model.fields,field_description:supplier_evaluation.field_stock_move__supplier_punctuality
+#: model:ir.model.fields,field_description:supplier_evaluation.field_stock_picking__supplier_punctuality
+msgid "Supplier punctuality"
+msgstr "Puntualitat del proveïdor"
+
+#. module: supplier_evaluation
+#: model:ir.model.fields.selection,name:supplier_evaluation.selection__supplier_evaluation_deadline_revision__revision_type__technical
+msgid "Technical change without a verified renegotiation"
+msgstr "Canvi tècnic, sense renegociació acreditada"
+
+#. module: supplier_evaluation
+#: model_terms:ir.ui.view,arch_db:supplier_evaluation.view_deadline_revision_search
+msgid "Technical changes"
+msgstr "Canvis tècnics"
+
+#. module: supplier_evaluation
+#. odoo-python
+#: code:addons/supplier_evaluation/models/deadline_confirmation.py:0
+msgid "The deadline has changed; review the latest current revision."
+msgstr "El termini ha canviat; cal revisar l'última revisió vigent."
+
+#. module: supplier_evaluation
+#. odoo-python
+#: code:addons/supplier_evaluation/models/purchase_line_otd.py:0
+msgid "The line OTD snapshot is immutable."
+msgstr "La captura OTD de la línia és immutable."
+
+#. module: supplier_evaluation
+#. odoo-python
+#: code:addons/supplier_evaluation/models/deadline_confirmation.py:0
+msgid "The new date matches the latest accepted date."
+msgstr "La nova data coincideix amb l'última data acceptada."
+
+#. module: supplier_evaluation
+#. odoo-python
+#: code:addons/supplier_evaluation/models/purchase_order_line.py:0
+msgid "The original commitment and history are protected."
+msgstr "El compromís original i l'historial estan protegits."
+
+#. module: supplier_evaluation
+#: model_terms:ir.ui.view,arch_db:supplier_evaluation.view_deadline_confirmation_form
+msgid ""
+"The original commitment, history and completed receipt evaluations are "
+"preserved."
+msgstr "El compromís original, l'historial i les avaluacions de recepcions completades es conserven."
+
+#. module: supplier_evaluation
+#. odoo-python
+#: code:addons/supplier_evaluation/models/stock_picking.py:0
+msgid "The receipt classification is immutable."
+msgstr "La classificació de la recepció és immutable."
+
+#. module: supplier_evaluation
+#: model:ir.model.constraint,message:supplier_evaluation.constraint_supplier_evaluation_deadline_revision_positive_sequence
+msgid "The revision must be positive."
+msgstr "La revisió ha de ser positiva."
+
+#. module: supplier_evaluation
+#: model:ir.model.constraint,message:supplier_evaluation.constraint_supplier_evaluation_deadline_revision_line_sequence_unique
+msgid "The revision must be unique per purchase line."
+msgstr "La revisió ha de ser única per línia de compra."
+
+#. module: supplier_evaluation
+#. odoo-python
+#: code:addons/supplier_evaluation/models/deadline_confirmation.py:0
+msgid "The revision no longer matches the current order and supplier."
+msgstr "La revisió ja no correspon a la comanda i al proveïdor actuals."
+
+#. module: supplier_evaluation
+#. odoo-python
+#: code:addons/supplier_evaluation/models/deadline_confirmation.py:0
+msgid "The revision predates the latest confirmed agreement."
+msgstr "La revisió és anterior a l'últim acord confirmat."
+
+#. module: supplier_evaluation
+#. odoo-python
+#: code:addons/supplier_evaluation/models/deadline_confirmation.py:0
+msgid "The same revision cannot be confirmed twice."
+msgstr "No es pot confirmar dues vegades la mateixa revisió."
+
+#. module: supplier_evaluation
+#. odoo-python
+#: code:addons/supplier_evaluation/models/deadline_confirmation.py:0
+msgid "The selected revision does not exist."
+msgstr "La revisió seleccionada no existeix."
+
+#. module: supplier_evaluation
+#. odoo-python
+#: code:addons/supplier_evaluation/models/deadline_confirmation.py:0
+msgid "The server sets the historical confirmation data."
+msgstr "Les dades històriques de la confirmació les fixa el servidor."
+
+#. module: supplier_evaluation
+#. odoo-python
+#: code:addons/supplier_evaluation/wizard/deadline_renegotiation.py:0
+msgid "The server sets the wizard dates and relationships."
+msgstr "Les dates i les relacions de l'assistent les fixa el servidor."
+
+#. module: supplier_evaluation
+#. odoo-python
+#: code:addons/supplier_evaluation/models/stock_move.py:0
+msgid "The source of a historical snapshot cannot be changed."
+msgstr "No es pot canviar l'origen d'una captura històrica."
+
+#. module: supplier_evaluation
+#. odoo-python
+#: code:addons/supplier_evaluation/models/deadline_confirmation.py:0
+msgid ""
+"This revision does not represent a deadline change eligible for "
+"confirmation."
+msgstr "La revisió no representa un canvi de termini confirmable."
+
+#. module: supplier_evaluation
+#. odoo-python
+#: code:addons/supplier_evaluation/models/deadline_confirmation.py:0
+#: model:ir.model.constraint,message:supplier_evaluation.constraint_supplier_evaluation_deadline_confirmation_revision_unique
+msgid "This revision has already been confirmed."
+msgstr "Aquesta revisió ja està confirmada."
+
+#. module: supplier_evaluation
+#: model_terms:ir.ui.view,arch_db:supplier_evaluation.view_deadline_revision_form
+msgid "Time"
+msgstr "Moment"
+
+#. module: supplier_evaluation
+#: model:ir.model.fields.selection,name:supplier_evaluation.selection__supplier_evaluation_deadline_revision__change_source__baseline
+msgid "Tracking initialization"
+msgstr "Inicialització del seguiment"
+
+#. module: supplier_evaluation
+#: model:ir.model,name:supplier_evaluation.model_stock_picking
+msgid "Transfer"
+msgstr "Transferència"
+
+#. module: supplier_evaluation
+#: model_terms:ir.ui.view,arch_db:supplier_evaluation.view_deadline_revision_form
+#: model_terms:ir.ui.view,arch_db:supplier_evaluation.view_deadline_revision_list
+msgid "Type"
+msgstr "Tipus"
+
+#. module: supplier_evaluation
+#: model:ir.model.fields.selection,name:supplier_evaluation.selection__supplier_evaluation_deadline_revision__change_direction__unchanged
+msgid "Unchanged"
+msgstr "Sense canvi"
+
+#. module: supplier_evaluation
+#: model:ir.model.fields.selection,name:supplier_evaluation.selection__purchase_order_line__supplier_otd_status__unknown
+msgid "Unknown"
+msgstr "Desconegut"
+
+#. module: supplier_evaluation
+#. odoo-python
+#: code:addons/supplier_evaluation/models/res_partner.py:0
+msgid "Use a boolean data-availability comparison."
+msgstr "Utilitzeu una comparació booleana de disponibilitat de dades."
+
+#. module: supplier_evaluation
+#. odoo-python
+#: code:addons/supplier_evaluation/models/res_partner.py:0
+msgid "Use a finite numeric OTD comparison."
+msgstr "Utilitzeu una comparació OTD amb un valor numèric finit."
+
+#. module: supplier_evaluation
+#: model_terms:ir.ui.view,arch_db:supplier_evaluation.view_deadline_revision_form
+msgid "User"
+msgstr "Usuari"
+
+#. module: supplier_evaluation
+#. odoo-python
+#: code:addons/supplier_evaluation/models/stock_picking.py:0
+msgid "Validation added a purchase line without a captured agreement."
+msgstr "La validació ha afegit una línia de compra sense acord capturat."
+
+#. module: supplier_evaluation
+#: model_terms:ir.ui.view,arch_db:supplier_evaluation.res_partner_form_supplier_otd
+msgid "View evaluated lines"
+msgstr "Veure línies avaluades"
+
+#. module: supplier_evaluation
+#: model_terms:ir.ui.view,arch_db:supplier_evaluation.view_deadline_revision_search
+msgid "With confirmation"
+msgstr "Amb confirmació"
+
+#. module: supplier_evaluation
+#: model_terms:ir.ui.view,arch_db:supplier_evaluation.view_supplier_otd_search
+msgid "With data"
+msgstr "Amb dades"
+
+#. module: supplier_evaluation
+#: model:ir.model.fields.selection,name:supplier_evaluation.selection__supplier_evaluation_deadline_renegotiation_wizard__supplier_attributable__yes
+msgid "Yes, attributable to the supplier"
+msgstr "Sí, atribuïble al proveïdor"
+
+#. module: supplier_evaluation
+#. odoo-python
+#: code:addons/supplier_evaluation/models/deadline_confirmation.py:0
+msgid "You cannot confirm agreements for this company."
+msgstr "No podeu confirmar acords d'aquesta empresa."
+
+#. module: supplier_evaluation
+#. Module metadata belongs to the base.module_* external identifier.
+#: model:ir.module.module,shortdesc:base.module_supplier_evaluation
+msgid "Supplier Evaluation"
+msgstr "Avaluació de proveïdors"
+
+#. module: supplier_evaluation
+#. Module metadata belongs to the base.module_* external identifier.
+#: model:ir.module.module,summary:base.module_supplier_evaluation
+msgid "Completed-line OTD and supplier deadline history"
+msgstr "OTD per línia completada i historial de terminis dels proveïdors"
+
+#. module: supplier_evaluation
+#. Module metadata belongs to the base.module_* external identifier.
+#: model:ir.module.module,description:base.module_supplier_evaluation
+msgid "Immutable completed-line OTD based on the latest confirmed agreement or original commitment, with a 24-hour tolerance. Preserves historical receipt snapshots."
+msgstr "OTD immutable per línia completada segons l'últim acord confirmat o el compromís original, amb tolerància de 24 hores. Conserva les captures històriques de recepcions."

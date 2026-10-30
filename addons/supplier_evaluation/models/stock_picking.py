@@ -11,28 +11,28 @@ class StockPicking(models.Model):
     _inherit = "stock.picking"
 
     supplier_punctuality = fields.Selection(
-        selection=[("on_time", "Puntual"), ("late", "Amb retard")],
-        string="Puntualitat del proveïdor",
+        selection=[("on_time", "On time"), ("late", "Late")],
+        string="Supplier punctuality",
         readonly=True, copy=False,
-        help="Resultat immutable segons els acords previs a la validació; tolerància de 24 hores.",
+        help="Immutable outcome based on agreements recorded before validation; 24-hour tolerance.",
     )
-    supplier_evaluation_captured_at = fields.Datetime(readonly=True, copy=False)
+    supplier_evaluation_captured_at = fields.Datetime(readonly=True, copy=False, string="Evaluation captured on")
 
     @api.model_create_multi
     def create(self, vals_list):
         if any(_EVALUATION_FIELDS.intersection(vals) for vals in vals_list):
-            raise AccessError(_("L'avaluació només es pot crear en validar la recepció."))
+            raise AccessError(_("Evaluations can only be created when validating a receipt."))
         return super().create(vals_list)
 
     def write(self, vals):
         if _EVALUATION_FIELDS.intersection(vals):
-            raise AccessError(_("La classificació de la recepció és immutable."))
+            raise AccessError(_("The receipt classification is immutable."))
         return super().write(vals)
 
     @api.ondelete(at_uninstall=False)
     def _unlink_except_supplier_evaluation(self):
         if self.filtered("supplier_evaluation_captured_at"):
-            raise UserError(_("No es poden eliminar recepcions amb avaluacions històriques."))
+            raise UserError(_("Receipts with historical evaluations cannot be deleted."))
 
     def _action_done(self):
         self.check_access("write")
@@ -77,7 +77,7 @@ class StockPicking(models.Model):
             )
             for move in received:
                 if move.purchase_line_id and move.purchase_line_id.id not in agreements:
-                    raise UserError(_("La validació ha afegit una línia de compra sense acord capturat."))
+                    raise UserError(_("Validation added a purchase line without a captured agreement."))
                 move._supplier_capture_deadline(
                     agreements.get(move.purchase_line_id.id, (False, False, False)),
                     picking.date_done, captured_at,
